@@ -1,6 +1,6 @@
 // ======================================================================
-// modes.js : 모드 : 기본 배틀(1:1 / 1:1:1) · 도전 모드 · 특수맵 배틀 · 도전 모드 2.0 (갈림길)
-// 안에 들어있는 순서 : extra18 → extra24
+// modes.js : 모드 : 기본 배틀(1:1 / 1:1:1) · 도전 모드 · 특수맵 배틀 · 도전 모드 2.0 (갈림길) · C.H.A.O.S
+// 안에 들어있는 순서 : extra18 → extra24 → extra25
 // (순서가 중요해서 위에서부터 차례로 실행됨 · 섹션 위치를 바꾸지 말 것)
 // ======================================================================
 
@@ -356,4 +356,125 @@ const _updRL=update;update=function(dt){_updRL(dt);if(!CHAL||!F||phase!='play')r
 const _initRL=init;init=function(){_initRL.apply(this,arguments);if(F)F.forEach(f=>{f.chEl=0})};
 // 엘리트 표시
 const _lowRL=lowHP;lowHP=function(f){_lowRL(f);if(!f.chEl||f.dead||f.hid)return;if(typeof lkAura=='function')lkAura(f.x,f.y,f.r,'#ff8040',.6);g.save();g.translate(f.x,f.y-f.r-16+Math.sin(clock*3)*2);g.fillStyle='#ff8040';g.strokeStyle='#2a1000';g.lineWidth=2;g.beginPath();g.moveTo(0,-10);g.lineTo(10,0);g.lineTo(0,10);g.lineTo(-10,0);g.closePath();g.fill();g.stroke();g.fillStyle='#2a1000';g.font='900 12px '+UTF;g.textAlign='center';g.textBaseline='middle';g.fillText('!',0,1);g.restore()};
+;
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ▶ 섹션 : extra25
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ===== extra25.js : C.H.A.O.S 모드 =====
+// 캐릭터 대신 "봇"으로 시작 · 모든 캐릭터의 스킬 중에서 랜덤 3개 (스킬 2 + 궁 1 · 리롤 3번)
+// 5라운드 · 라운드가 끝날 때마다 증강 3개 중 하나 (실버 · 골드 · 프리즘) · 상대 봇도 같은 수만큼 증강
+// 라운드마다 "시스템 오류" (거대화 · 폭탄 낙하 · 좌표 오류 …) · 마지막 라운드는 3인 난투
+// 늘어지지 않게 : 18초가 지나면 "시스템 과열" → 모두 받는 피해가 계속 커짐
+let CX=null,CXNO=0;const CXQ=[];
+const CXBOT={name:'C.H.A.O.S 봇',gl:'봇',k:'cxbot',r:26,sp:212};
+const CXEN=[['#ff3d6e','#ffd6e0','#2a0410'],['#ffb020','#fff0c8','#2a1a00'],['#9d6bff','#eadcff','#160a2a'],['#5aff7a','#e0ffe6','#06280e']];
+const CXHP=[1.4,1.2,1.05,.92,.85];
+const CXEV={none:{n:'정상 작동',d:'아직은 평범하다…'},giant:{n:'거대화 오류',d:'모두 몸이 커짐'},tiny:{n:'축소 오류',d:'모두 작아지고 빨라짐'},bomb:{n:'폭탄 낙하',d:'하늘에서 폭탄이 계속 떨어짐'},cd:{n:'쿨타임 폭주',d:'스킬 쿨타임이 두 배로 빨리 돎'},
+  ult:{n:'궁극기 과충전',d:'궁 게이지가 가득 찬 채로 시작'},tele:{n:'좌표 오류',d:'4초마다 서로 위치가 뒤바뀜'},vamp:{n:'흡혈 버그',d:'모두 준 피해의 20% 회복'},final:{n:'최종 오류',d:'폭탄 낙하 + 쿨타임 폭주 · 3인 난투'}};
+const CXT={s:{n:'실버',c:'#c8d0dc'},g:{n:'골드',c:'#ffc23a'},p:{n:'프리즘',c:'#ff6af0'}};
+// 증강 = 내 스킬 하나를 골라서 강화 (라운드마다 스킬 레벨이 올라감) · sl : sk 일반 스킬 / ult 궁극기 / any 아무 스킬
+const CXA=[
+  {k:'dmg',t:'s',sl:'any',n:'위력 강화',d:'피해 +30%',ic:'pow',max:3},{k:'cdr',t:'s',sl:'sk',n:'과부하 회로',d:'쿨타임 -25%',ic:'cd',max:3},{k:'quick',t:'s',sl:'sk',n:'즉시 실행',d:'시전 딜레이 없음 · 쿨타임 -10%',ic:'spd',max:1},
+  {k:'leech',t:'s',sl:'any',n:'흡수 코드',d:'이 스킬로 준 피해의 30% 회복',ic:'vamp',max:2},{k:'ultst',t:'s',sl:'ult',n:'예열',d:'라운드 시작 때 궁 게이지 +50%',ic:'ult',max:2},
+  {k:'crit',t:'g',sl:'any',n:'치명적 오류',d:'이 스킬 피해가 25% 확률로 2배',ic:'crit',max:2},{k:'stun',t:'g',sl:'sk',n:'정지 패킷',d:'맞은 적 0.5초 기절 (2초에 한 번)',ic:'skull',max:1},
+  {k:'guard',t:'g',sl:'any',n:'방화벽',d:'쓸 때마다 공격 1번을 막는 보호막',ic:'shield',max:1},{k:'echo',t:'g',sl:'sk',n:'메아리',d:'0.5초 뒤에 한 번 더 발동',ic:'ghost',max:1},
+  {k:'ultg',t:'g',sl:'ult',n:'궁 폭주',d:'궁 게이지가 2배 빨리 참',ic:'ult',max:1},{k:'chain',t:'g',sl:'any',n:'전류 누수',d:'맞힐 때 번개가 튐 (+3 · 0.6초에 한 번)',ic:'bolt',max:1},
+  {k:'over',t:'p',sl:'sk',n:'폭주 모드',d:'피해 +50% · 쿨타임 -35%',ic:'cd',max:1},{k:'triple',t:'p',sl:'sk',n:'삼중 실행',d:'0.45초 · 0.9초 뒤에 두 번 더 발동',ic:'ghost',max:1},
+  {k:'refill',t:'p',sl:'ult',n:'무한 루프',d:'궁을 쓰면 게이지 50%가 바로 다시 참',ic:'rev',max:1},{k:'udbl',t:'p',sl:'ult',n:'궁 과부하',d:'궁 피해 +60% · 쓰면 체력 +15',ic:'ult',max:1},
+  {k:'clone',t:'p',sl:null,n:'오류 복제',d:'랜덤 스킬 하나를 더 장착',ic:'crit',max:2}];
+(function(){const L=$('#modes .mlist');if(!L)return;L.insertAdjacentHTML('beforeend','<button class="mc cxm" data-x="X"><i>ERR</i><b>C.H.A.O.S</b><small>봇으로 시작 · 랜덤 스킬 3개 · 라운드마다 증강 · 5라운드</small></button>');
+  $('#modes .mc[data-x="X"]').addEventListener('click',()=>{audioOn();SFX('click');cxStart()})})();
+function cxPool(){const S=[],U=[];DEF.forEach((d,i)=>d.sk.forEach((s,j)=>{(s.ult?U:S).push({s,o:i,j})}));return{S,U}}
+function cxPick(L,ex){const c=L.filter(q=>!ex.some(e=>e.s==q.s));return c[Math.floor(Math.random()*c.length)]}
+function cxKit(){const P=cxPool(),a=cxPick(P.S,[]),b=cxPick(P.S,[a]),u=cxPick(P.U,[]);return[a,b,u]}
+function cxUnit(name,col,me){return{name,col,kit:cxKit(),U:{},sl:{},me}}
+function cxCanAug(u,a,slot){if(!a.sl)return!(a.max&&(u.U[a.k]||0)>=a.max);const L=u.sl[slot]||{};if(a.max&&(L[a.k]||0)>=a.max)return false;if(a.k=='echo'&&L.triple||a.k=='triple'&&L.echo)return false;return true}
+function cxSlots(u,kind){return u.kit.map((k,i)=>i).filter(i=>kind=='any'||(kind=='ult'?u.kit[i].s.ult:!u.kit[i].s.ult))}
+function cxLv(u,i){const L=u.sl[i]||{};return 1+Object.values(L).reduce((a,b)=>a+b,0)}
+function cxRoll(u,r){const W=[{s:60,g:32,p:8},{s:50,g:38,p:12},{s:40,g:42,p:18},{s:30,g:45,p:25},{s:30,g:45,p:25}][Math.min(4,r-1)];const out=[];let guard=0;
+  while(out.length<3&&guard++<80){let s=W.s+W.g+W.p,x=Math.random()*s,t='s';for(const k of['s','g','p']){x-=W[k];if(x<=0){t=k;break}}const L=CXA.filter(a=>a.t==t);const a=L[Math.floor(Math.random()*L.length)];
+    let slot=null;if(a.sl){const sl=cxSlots(u,a.sl).filter(i=>cxCanAug(u,a,i));if(!sl.length)continue;slot=sl[Math.floor(Math.random()*sl.length)]}else if(!cxCanAug(u,a))continue;
+    if(out.some(o=>o.a==a&&o.slot==slot))continue;out.push({a,slot})}return out}
+function cxApply(u,o){const a=o.a;if(a.sl){const L=u.sl[o.slot]||(u.sl[o.slot]={});L[a.k]=(L[a.k]||0)+1}else{u.U[a.k]=(u.U[a.k]||0)+1;if(a.k=='clone'){const P=cxPool(),n=cxPick(P.S,u.kit);if(n)u.kit.push(n)}}}
+// 스킬을 쓰는 동안만 원래 캐릭터의 k 로 바꿔서 실행 (그림 · 컷 · 효과가 원래 캐릭터 것을 찾을 수 있게)
+function cxRun(s,ok,j,o,t){const k0=o.d.k;o.d.k=ok;o.cxLast=j;o.cxLT=s.ult?5.5:3;try{s.f(o,t)}finally{o.d.k=k0}}
+function cxSkill(k,L,j){const s=k.s,s2=Object.assign({},s),cnt=v=>L[v]||0,ok=DEF[k.o].k;if(!s.ult){s2.cd=Math.round(s.cd*Math.pow(.75,cnt('cdr'))*Math.pow(.9,cnt('quick'))*(cnt('over')?.65:1)*10)/10;if(cnt('quick'))s2.w=.05}
+  const rep=s.ult?[]:cnt('triple')?[.45,.9]:cnt('echo')?[.5]:[];
+  s2.f=(o,t)=>{if(cnt('guard'))o.cxSh=Math.max(o.cxSh||0,1);if(s.ult){if(cnt('udbl')&&!o.dead){o.hp=Math.min(100,o.hp+15);if(!SKIP)ft(o.x,o.y-o.r-30,'+15','#ff6af0',16)}if(cnt('refill'))CXQ.push({t:.25,fn:()=>{if(!o.dead)o.ug=Math.max(o.ug||0,50)}})}
+    cxRun(s,ok,j,o,t);rep.forEach((d,n)=>CXQ.push({t:d,fn:()=>{if(o.dead)return;const tt=t&&!t.dead&&!t.hid?t:tgt(o);if(tt){cxRun(s,ok,j,o,tt);if(!SKIP)ft(o.x,o.y-o.r-30,rep.length>1?'삼중 실행!':'메아리!','#3ff0ff',14)}}}))};return s2}
+function cxDef(u,i){const c=u.col;return Object.assign({},CXBOT,{name:u.name,col:c[0],hi:c[1],dk:c[2],sk:u.kit.map((k,j)=>cxSkill(k,u.sl[j]||{},j)),cx:1})}
+// ---------- 화면 ----------
+function cxEl(){return chalEl()}
+function cxHide(){const a=$('#chal');if(a)a.classList.remove('on')}
+function cxCard(k,lab){const d=DEF[k.o],I=(INFO[d.name]||{sk:[]}).sk[k.j]||[];return`<div class="cu cxk${k.s.ult?' t-l':' t-r'}" style="--uc:${d.col}"><i>${lab}</i><canvas class="ic" data-o="${k.o}"></canvas><b>${k.s.n}</b><small>${I[1]||''}</small><em>${d.name}${I[0]?' · '+I[0]+' DMG':''}</em></div>`}
+function cxPaint(el){el.querySelectorAll('canvas.ic[data-o]').forEach(cv=>paintIc(cv,DEF[+cv.dataset.o],30))}
+function cxStart(){const sel0=CX&&CX.sel0||SEL.slice(),mode0=CX?CX.mode0:MODE;CX={on:1,r:1,rr:3,res:[],handled:1,sel0,mode0,me:cxUnit('나 · C.H.A.O.S',['#3ff0ff','#e0ffff','#03282c'],1),evs:[],ev:'none',best:cxBest()};const ks=['giant','tiny','bomb','cd','ult','tele','vamp'].sort(()=>Math.random()-.5);CX.plan=['none',ks[0],ks[1],ks[2],'final'];
+  scr('none');document.body.classList.add('m');cxDraft()}
+function cxBest(){try{return+localStorage.getItem('jsbb3_cx')||0}catch(e){return 0}}
+function cxDraft(){const c=CX,u=c.me,el=cxEl();
+  el.innerHTML=`<div class="chb cxb"><div class="cht cxt">* SYSTEM BOOT · C.H.A.O.S</div><div class="chs">모든 캐릭터의 스킬 중에서 랜덤으로 3개를 받았다. · 리롤 <b class="cxrr">${c.rr}</b>번 남음</div><div class="chq">* 마음에 안 드는 스킬은 🎲로 바꿔라.</div>
+    <div class="chc cxdraft">${u.kit.map((k,i)=>`<div class="cxslot">${cxCard(k,i==2?'궁극기':'스킬 '+(i+1))}<button class="cxre" data-i="${i}" ${c.rr<=0?'disabled':''}>🎲 바꾸기</button></div>`).join('')}</div>
+    <div class="cxinfo">* 5라운드 · 라운드가 끝날 때마다 증강을 하나씩 고름 · 상대 봇도 똑같이 강해짐<br>* 라운드마다 시스템 오류가 생김 · 마지막 5라운드는 3인 난투</div>
+    <div class="btns"><button class="btn" id="cxback">MENU</button><button class="btn pri" id="cxgo">부팅 시작</button></div></div>`;
+  cxPaint(el);el.querySelectorAll('.cxre').forEach(b=>b.addEventListener('click',()=>{if(c.rr<=0)return;c.rr--;SFX('click');const i=+b.dataset.i,P=cxPool(),L=u.kit[i].s.ult?P.U:P.S;u.kit[i]=cxPick(L,u.kit);try{SFXa('ch_flip')}catch(e){}cxDraft();const card=cxEl().querySelectorAll('.cxslot')[i];if(card){card.classList.add('flip')}}));
+  $('#cxback').addEventListener('click',()=>{SFX('click');cxHide();goHome()});$('#cxgo').addEventListener('click',()=>{SFX('click');cxRound()});void el.offsetWidth;el.classList.add('on')}
+function cxEnemy(i){const c=CX,u=cxUnit('버그 봇 #'+(c.r*10+i),CXEN[(c.r+i)%CXEN.length],0);for(let k=0;k<c.r-1;k++){const o=cxRoll(u,k+1);if(o.length)cxApply(u,o[Math.floor(Math.random()*o.length)])}return u}
+function cxRound(){const c=CX,n=c.r==5?3:2;c.ev=c.plan[c.r-1];c.evs=c.ev=='final'?['bomb','cd']:[c.ev];c.ens=[];for(let i=1;i<n;i++)c.ens.push(cxEnemy(i));
+  SEL=[3,4,5];MODE=n;MENU_T=0;TOURM=null;if(typeof CHAL!='undefined'){CHAL=null;CHMENU=0;STGM=0;STG=null}cxHide();document.body.classList.remove('m');$('#menu').classList.remove('on');scr('none');
+  init();const units=[c.me,...c.ens];F.forEach((f,i)=>{const u=units[i],U=u.U;f.d=cxDef(u,i);f.cxu=u;f.r=26;f.sp=212;f.hp=100;f.show=100;f.cds=f.d.sk.map(s=>s.ult?rnd(9,12):rnd(1,2.5));
+    f.ug=Math.min(100,50*((u.sl[u.kit.findIndex(k=>k.s.ult)]||{}).ultst||0));f.cxSh=0;f.cxLT=0;f.cxLast=-1;f.cxStT=0;f.cxChT=0;
+    if(c.evs.includes('giant'))f.r*=1.35;if(c.evs.includes('tiny')){f.r*=.72;f.sp*=1.15}if(c.evs.includes('ult'))f.ug=100});
+  c.t=0;c.heat=1;c.evT=0;c.handled=0;CXQ.length=0;buildHUD();try{if(typeof sndPri=='function')sndPri(units.flatMap(u=>u.kit.map(k=>DEF[k.o].k)))}catch(e){}}
+function cxAfter(won){const c=CX;c.res.push(won);if(c.r>=5){cxEnd();return}const opts=cxRoll(c.me,c.r);c.aug=opts;c.arr=1;cxAug()}
+function cxDots(){const c=CX;return'<div class="cxdots">'+[0,1,2,3,4].map(i=>`<span class="${i<c.res.length?(c.res[i]?'w':'l'):i==c.res.length?'n':''}">${i<c.res.length?(c.res[i]?'승':'패'):i+1}</span>`).join('')+'</div>'}
+function cxKitHtml(u){return'<div class="cxkit">'+u.kit.map((k,i)=>{const L=u.sl[i]||{},lv=cxLv(u,i),tags=Object.keys(L).map(q=>CXA.find(a=>a.k==q).n+(L[q]>1?'×'+L[q]:'')).join(' · ');return`<em style="--uc:${DEF[k.o].col}">${k.s.ult?'ULT':'S'+(i+1)} ${k.s.n} <b class="cxlv">Lv.${lv}</b>${tags?' <small>'+tags+'</small>':''}</em>`}).join('')+'</div>'}
+function cxAug(){const c=CX,u=c.me,el=cxEl(),won=c.res[c.res.length-1],nx=CXEV[c.plan[c.r]];
+  el.innerHTML=`<div class="chb cxb"><div class="cht cxt">* ROUND ${c.r} ${won?'승리!':'패배…'}</div>${cxDots()}<div class="chs">다음 라운드 · <b style="color:#ff6af0">시스템 오류 : ${nx.n}</b> · ${nx.d}</div>
+    <div class="chq">* 강화할 스킬 증강을 하나 골라라.</div><div class="chc">${c.aug.map((o,i)=>{const a=o.a,T=CXT[a.t],tg=o.slot!=null?u.kit[o.slot]:null;return`<button class="cu cxa t-${a.t}" data-i="${i}" style="--uc:${T.c}"><i>${T.n}</i><canvas width="96" height="96"></canvas><b>${a.n}</b><small>${tg?'<span class="cxtg">['+tg.s.n+'] Lv.'+cxLv(u,o.slot)+' → '+(cxLv(u,o.slot)+1)+'</span><br>':''}${a.d}</small></button>`}).join('')}</div>
+    <div class="chrrw"><button class="btn" id="cxar" ${c.arr<=0?'disabled':''}>다시 뽑기 ${c.arr}/1</button></div><div class="chq">* 지금 내 봇</div>${cxKitHtml(u)}</div>`;
+  el.querySelectorAll('.cxa').forEach(b=>{const o=c.aug[+b.dataset.i];chalIcon(b.querySelector('canvas'),o.a.ic,CXT[o.a.t].c);b.addEventListener('click',()=>{SFX('click');b.classList.add('pick');try{SFXa(o.a.t=='p'?'ch_leg':o.a.t=='g'?'ch_epic':'ch_flip')}catch(e){}cxApply(u,o);setTimeout(()=>{c.r++;cxRound()},380)})});
+  $('#cxar').addEventListener('click',()=>{if(c.arr<=0)return;c.arr--;SFX('click');c.aug=cxRoll(u,c.r);cxAug()});
+  if(c.aug.some(o=>o.a.t=='p'))try{SFXa('ch_pre')}catch(e){}void el.offsetWidth;el.classList.add('on')}
+function cxEnd(){const c=CX,w=c.res.filter(Boolean).length,G=['F','C','B','A','S','S+'][w],best=c.best,nr=w>best;try{if(nr)localStorage.setItem('jsbb3_cx',w)}catch(e){}const el=cxEl();
+  el.innerHTML=`<div class="chb end cxb"><div class="cht cxt">* SYSTEM SHUTDOWN</div><div class="cxg g${w}">${G}</div><div class="chs">${w} / 5 라운드 승리 · ${nr?'<span class="nr">NEW RECORD!</span>':'최고 기록 '+best+'승'}</div>${cxDots()}<div class="chq">* 최종 봇</div>${cxKitHtml(c.me)}
+    <div class="btns"><button class="btn" id="cxm">MENU</button><button class="btn pri" id="cxa2">다시 부팅</button></div></div>`;
+  $('#cxm').addEventListener('click',()=>{SFX('click');cxHide();goHome()});$('#cxa2').addEventListener('click',()=>{SFX('click');cxStart()});try{SFXa(w>=4?'ch_myth':w>=2?'ch_epic':'au_down')}catch(e){}void el.offsetWidth;el.classList.add('on')}
+function cxOff(){if(CX&&CX.sel0){SEL=CX.sel0.slice();MODE=CX.mode0||2}if(SEL.length<3)SEL=[...SEL,0,1,2].slice(0,3);CX=null;CXQ.length=0}
+const _goHomeCX=goHome;goHome=function(){cxOff();return _goHomeCX.apply(this,arguments)};
+const _initMenuCX=initMenu;initMenu=function(){cxOff();return _initMenuCX.apply(this,arguments)};
+// ---------- 전투 중 ----------
+function cxNear(f,R){return F.filter(e=>e!=f&&!e.dead&&!e.hid).sort((a,b)=>dist(f,a)-dist(f,b)).filter(e=>dist(f,e)<R)[0]}
+const _hurtCX=hurt;hurt=function(t,n,o){if(!CX||!CX.on||!F||!(n>0)||phase!='play'||!t||!t.cxu)return _hurtCX.apply(this,arguments);const a=[...arguments];let m=CXHP[CX.r-1]*(CX.heat||1),L=null;
+  if(o!=t){if(t.cxSh>0){t.cxSh--;ft(t.x,t.y-t.r-30,'방화벽!','#9fd8ff',16);ring(t.x,t.y,t.r,t.r+40,'#9fd8ff',4,.35);return}
+    if(o&&o.cxu&&o.cxLT>0&&o.cxLast>=0){L=o.cxu.sl[o.cxLast]||{};const ul=o.cxu.kit[o.cxLast]&&o.cxu.kit[o.cxLast].s.ult;m*=1+.3*(L.dmg||0);if(L.over)m*=1.5;if(ul&&L.udbl)m*=1.6;if(L.crit&&Math.random()<.25*L.crit){m*=2;if(!SKIP)ft(t.x,t.y-t.r-42,'치명적 오류!','#ffc23a',16)}}}
+  a[1]=Math.round(n*m*10)/10;
+  const hp0=t.hp,r=_hurtCX.apply(this,a),dealt=Math.max(0,hp0-t.hp);
+  if(o&&o.cxu&&o!=t&&!o.dead&&dealt>0){if(CX.evs.includes('vamp'))o.hp=Math.min(100,o.hp+dealt*.2);
+    if(L){if(L.leech)o.hp=Math.min(100,o.hp+dealt*.3*L.leech);if(L.stun&&!t.dead&&!(t.cxStT>0)){t.cxStT=2;t.stn=Math.max(t.stn||0,.5);t.cast=null;if(!SKIP)ft(t.x,t.y-t.r-30,'정지!','#9fd8ff',15)}
+      if(L.chain&&!CXNO&&!t.dead&&!(o.cxChT>0)){o.cxChT=.6;CXNO=1;FX.push({k:'stzap',x:t.x,y:t.y,l:.35,m:.35});hurt(t,3,o,t.x,t.y,0,0);CXNO=0}}}
+  return r};
+const _updCX=update;update=function(dt){_updCX(dt);
+  if(CXQ.length){for(let i=CXQ.length-1;i>=0;i--){const q=CXQ[i];q.t-=dt;if(q.t<=0){CXQ.splice(i,1);if(phase=='play')try{q.fn()}catch(e){}}}}
+  if(!CX||!CX.on||!F)return;
+  if(phase=='end'&&shown&&!CX.handled){CX.handled=1;$('#msg').className='';cxAfter(!!(win&&win.i==0&&!F[0].dead));return}
+  if(phase!='play')return;CX.t+=dt;const h0=CX.heat;CX.heat=CX.t>18?1+(CX.t-18)*.12:1;if(h0<=1&&CX.heat>1&&!SKIP){SFXa('ult');shake=Math.max(shake,8)}
+  F.forEach(f=>{if(f.dead||!f.cxu)return;const u=f.cxu;if(f.cxLT>0)f.cxLT-=dt;if(f.cxStT>0)f.cxStT-=dt;if(f.cxChT>0)f.cxChT-=dt;
+    if(CX.evs.includes('cd'))f.cds=f.cds.map(v=>v-dt);
+    if((u.sl[u.kit.findIndex(k=>k.s.ult)]||{}).ultg)f.ug=Math.min(100,(f.ug||0)+dt*2.2)});
+  if(CX.evs.includes('bomb')){CX.evT+=dt;if(CX.evT>=1.3){CX.evT=0;const al=F.filter(f=>!f.dead&&!f.hid),tg=al[Math.floor(Math.random()*al.length)];if(tg)FX.push({k:'stbomb',x:clamp(tg.x+rnd(-80,80),40,A-40),y:clamp(tg.y+rnd(-80,80),40,A-40),l:.9,m:.9,o:ENV})}}
+  if(CX.evs.includes('tele')){CX.tp=(CX.tp||0)+dt;if(CX.tp>=4){CX.tp=0;const al=F.filter(f=>!f.dead&&!f.hid);if(al.length>=2){const a2=al[0],b2=al[1+Math.floor(Math.random()*(al.length-1))];[a2,b2].forEach(f=>FX.push({k:'ghost',x:f.x,y:f.y,r:f.r,c:f.d.col,l:.45,m:.45}));const x=a2.x,y=a2.y;a2.x=b2.x;a2.y=b2.y;b2.x=x;b2.y=y;SFXa('kr_swap');ring(a2.x,a2.y,a2.r,a2.r+60,'#ff6af0',5,.4);ring(b2.x,b2.y,b2.r,b2.r+60,'#ff6af0',5,.4)}}}};
+// 라운드 표시 · 과열 · 아이콘
+const _floorCX=floorFX;floorFX=function(){_floorCX.apply(this,arguments);if(!CX||!CX.on||!F)return;
+  if(phase=='cd'){const E=CXEV[CX.ev];g.save();g.globalAlpha=Math.min(1,(4.4-tm)/.4);g.textAlign='center';g.lineJoin='round';g.font='900 34px '+UTF;g.lineWidth=8;g.strokeStyle='#000';const t=(CX.r==5?'FINAL ':'')+'ROUND '+CX.r+' / 5';g.strokeText(t,A/2,92);g.fillStyle=CX.r==5?'#ff6af0':'#3ff0ff';g.fillText(t,A/2,92);
+    g.font='700 16px '+UTF;g.lineWidth=5;g.strokeText('* 시스템 오류 : '+E.n,A/2,122);g.fillStyle='#ffffff';g.fillText('* 시스템 오류 : '+E.n,A/2,122);g.restore()}
+  if(phase=='play'&&CX.heat>1){const k=Math.min(1,(CX.heat-1)/1.2),pu=.5+.5*Math.sin(clock*8);g.save();g.strokeStyle='rgba(255,40,60,'+(.25+.45*k*pu)+')';g.lineWidth=10+14*k;g.strokeRect(0,0,A,A);g.font='900 15px '+UTF;g.textAlign='center';g.fillStyle='rgba(255,90,100,'+(.6+.4*pu)+')';g.fillText('⚠ 시스템 과열 · 받는 피해 ×'+(CX.heat).toFixed(1),A/2,A-14);g.restore()}};
+const _lowCX=lowHP;lowHP=function(f){_lowCX(f);if(!f.cxu||f.dead||f.hid)return;if(f.cxSh>0){for(let i=0;i<f.cxSh;i++){const a=clock*2+i*Math.PI;g.save();g.translate(f.x+Math.cos(a)*(f.r+12),f.y+Math.sin(a)*(f.r+12));g.globalCompositeOperation='lighter';glow('#9fd8ff',0,0,9,.8);g.restore()}}
+  // 내 캐릭터 표시 : 흰 점선 고리 + 머리 위 "▼ 나"
+  if(f.cxu.me&&phase!='end'){const bob=Math.sin(clock*5)*3,y=f.y-f.r-26+bob;g.save();g.translate(f.x,f.y);g.rotate(clock*1.6);g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=2.2;g.setLineDash([7,6]);g.beginPath();g.arc(0,0,f.r+8,0,TAU);g.stroke();g.setLineDash([]);g.restore();
+    g.save();g.translate(f.x,y);g.fillStyle='#ffffff';g.strokeStyle='#000';g.lineWidth=3;g.beginPath();g.moveTo(-7,-4);g.lineTo(7,-4);g.lineTo(0,5);g.closePath();g.stroke();g.fill();
+    g.font='900 15px '+UTF;g.textAlign='center';g.lineJoin='round';g.lineWidth=5;g.strokeText('나',0,-10);g.fillStyle='#3ff0ff';g.fillText('나',0,-10);g.restore()}};
+EMB.cxbot=(f,D)=>{g.rotate(-f.rot);const jt=Math.random()<.08?rnd(-3,3):0,q=()=>{g.beginPath();g.moveTo(-8,-8);g.quadraticCurveTo(-8,-17,0,-17);g.quadraticCurveTo(9,-17,9,-9);g.quadraticCurveTo(9,-3,2,0);g.lineTo(1,5);g.moveTo(1,11);g.lineTo(1,12)};
+  g.save();g.translate(-1.8+jt,0);neon({col:'#ff2a6a',hi:'#ff9ab8'},1.3,q);g.restore();g.save();g.translate(1.8-jt,0);neon({col:'#2af0ff',hi:'#b8faff'},1.3,q);g.restore();neon(D,1.8,q);
+  neon({col:D.col,hi:D.hi},1,()=>{g.beginPath();g.moveTo(-19,-4);g.lineTo(-13,-4);g.lineTo(-13,6);g.moveTo(19,4);g.lineTo(13,4);g.lineTo(13,-6);g.moveTo(-6,18);g.lineTo(6,18)});g.save();g.globalCompositeOperation='lighter';glow(D.col,0,0,16,.25);g.restore()};
 ;

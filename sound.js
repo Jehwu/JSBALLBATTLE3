@@ -601,18 +601,34 @@ G.dt_press=()=>{const buf=Z(2.4);place(buf,hPunch(1),0,1.5);place(buf,hSub(60,16
 G.dt_scale=()=>{const buf=Z(1.2);place(buf,mul(T(.5,t=>Math.sin(PI2*(140+260*(1-Math.exp(-t*14)))*t+3*Math.sin(PI2*14*t)*Math.exp(-t*5))),t=>.25*Math.exp(-t*6)),0,1);[[.45,1320],[.6,1320]].forEach(([at,f])=>place(buf,mul(lp(pkSq(f,.09,.5),4000),t=>.06*Math.exp(-t*10)),at,1));return verb(buf,.6,.25,4000)};
 G.dt_sigh=()=>{const d=1.1,buf=Z(d+.4),src=voxSrc(d,t=>150-45*t/d);let x=voxSeg(src,[[d,[[500,900,1],[1000,1500,.5]]]],.6);x=mul(x,t=>.6*Math.min(1,t/.08)*Math.pow(Math.max(0,1-t/d),1.2));place(buf,add(x,mul(bp(noise(d),600,2400),t=>.35*Math.min(1,t/.06)*Math.max(0,1-t/d)),1),0,1);return verb(buf,.9,.35,2500)};
 ['dt_land','dt_press','dt_hoophit','dt_jump'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
-// ===== 캐릭터 공방 기본 소리 (어떤 캐릭에도 어울리게 · 묵직한 톤) =====
-G.cw_shot=()=>{const buf=Z(.7);place(buf,mul(sweepEnv(900,220,.12),t=>.3*Math.exp(-t*25)),0,1);place(buf,ed(bp(noise(.05),1200,6000),70),0,.7);place(buf,hSub(150,60,.15,16,2.5),0,.6);return verb(buf,.5,.25,4000)};
-G.cw_zone=()=>{const d=.8,buf=Z(d+.3);place(buf,mul(T(d,t=>Math.sin(PI2*(220+40*Math.sin(PI2*8*t))*t)),t=>.18*Math.min(1,t/.1)*Math.min(1,(d-t)/.1)),0,1);place(buf,mul(sine(55,d),t=>.2*Math.min(1,t/.2)),0,1);return verb(buf,.6,.3,3000)};
-G.cw_dash=()=>{const buf=Z(.9);place(buf,hWhoosh(.35,300,4000),0,1);place(buf,hSub(120,50,.3,9,3),.02,.7);return verb(buf,.5,.25,3500)};
-G.cw_beam=()=>{const d=.6,buf=Z(d+.4);place(buf,mul(sweepEnv(200,900,d,1.6),t=>.15*Math.min(1,t/.1)),0,1);place(buf,mul(movBP(noise(d),400,5000,.2),t=>.25*t/d),0,1);return verb(buf,.6,.3,4000)};
-G.cw_orb=()=>{const buf=Z(1);[0,.08].forEach((at,i)=>place(buf,mul(add(sine(i?466:349,.6),sine(i?932:698,.6),.3),t=>.12*Math.exp(-t*5)),at,1));place(buf,mul(movBP(noise(.5),800,4000,.2),t=>.2*Math.sin(Math.PI*Math.min(1,t/.5))),0,1);return verb(buf,.8,.4,4000)};
-G.cw_trap=()=>{const buf=Z(.8);[0,.12,.24].forEach(at=>{place(buf,ed(bp(noise(.02),800,5000),160),at,.7);place(buf,mul(sine(1240,.08),t=>.08*Math.exp(-t*40)),at+.01,1)});place(buf,hSub(110,55,.2,12,2.5),.25,.5);return verb(buf,.5,.25,4000)};
-G.cw_nova=()=>{const buf=Z(1.4);place(buf,hSub(100,35,.6,5,4),0,1.2);place(buf,mul(movBP(noise(.6),3000,300,.3),t=>.5*Math.exp(-t*4)),0,1);place(buf,mul(sweepEnv(600,150,.4),t=>.12*Math.exp(-t*5)),0,1);return verb(buf,1.2,.4,3000)};
-G.cw_fall=()=>{const d=.9,buf=Z(d+.3);place(buf,mul(T(d,t=>Math.sin(PI2*(1400-1100*t/d)*t)),t=>.1*Math.min(1,t/.1)),0,1);place(buf,mul(movBP(noise(d),5000,600,.25),t=>.35*t/d),0,1);return verb(buf,.6,.3,4000)};
-G.cw_boom=()=>{const buf=Z(1.8);place(buf,hPunch(1),0,1.2);place(buf,hCrack(.3,120,6000,9),0,.7);place(buf,hRumble(1.4,2.2),0,.8);return verb(buf,1.4,.35,2800)};
-G.cw_zap=()=>{const d=.45,buf=Z(d+.3);place(buf,mul(bp(noise(d),2000,9000),t=>.6*Math.exp(-t*7)*(.4+.6*Math.abs(Math.sin(PI2*55*t)))),0,1);place(buf,hSub(130,50,.25,10,3),0,.8);return verb(buf,.5,.25,6000)};
-['cw_boom','cw_nova','cw_dash'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
+// ===== 김지우 • 감정없는싸이코패스 (차가운 기계음 · 심전도) =====
+const psBeep=(f,d,a)=>mul(add(sine(f,d),sine(f*2,d),.15),t=>(a||.2)*Math.min(1,t/.003)*Math.min(1,(d-t)/.004));
+G.ps_scan=()=>{const d=1.2,buf=Z(d+.4);place(buf,mul(sweepEnv(300,1400,d,1.4),t=>.06*Math.min(1,t/.1)),0,1);for(let k=0;k<6;k++)place(buf,psBeep(1760,.04,.12),k*.2,1);place(buf,mul(lp(noise(d),900),t=>.08*Math.min(1,t/.2)),0,1);place(buf,mul(sine(55,d),t=>.15*Math.min(1,t/.2)),0,1);return verb(buf,.6,.3,4000)};
+G.ps_beat=()=>{const buf=Z(.5);place(buf,psBeep(988,.07,.16),0,1);place(buf,hSub(70,45,.18,14,2),0,.5);return verb(buf,.3,.15,4000)};
+G.ps_strike=()=>{const buf=Z(1.2);place(buf,ed(hp(noise(.02),3000),300),0,.9);place(buf,mul(add(sine(2600,.6),sine(3900,.6),.5),t=>.08*Math.exp(-t*7)),0,1);place(buf,hSub(110,35,.6,5,4),0,1.1);place(buf,hCrack(.2,500,7000,18),0,.6);return verb(buf,1,.35,3500)};
+G.ps_stare=()=>{const d=2,buf=Z(d+.6);place(buf,mul(add(add(sine(55,d),sine(58,d),.8),sine(110,d),.3),t=>.25*Math.min(1,t/.3)*Math.min(1,(d-t)/.4)),0,1);place(buf,mul(sine(1975,d),t=>.012*Math.min(1,t/.5)*Math.min(1,(d-t)/.4)),0,1);place(buf,mul(lp(noise(d),400),t=>.1*Math.min(1,t/.3)*Math.min(1,(d-t)/.4)),0,1);return verb(buf,1.6,.45,2000)};
+G.ps_tick=()=>{const buf=Z(.4);place(buf,mul(sine(140,.15),t=>.35*Math.exp(-t*25)),0,1);place(buf,ed(bp(noise(.02),800,3000),150),0,.3);return verb(buf,.3,.2,2500)};
+G.ps_freeze=()=>{const buf=Z(1.4);place(buf,hSub(90,30,.8,4,4),0,1.2);place(buf,mul(hp(noise(.8),3000),t=>.3*Math.exp(-t*5)),0,1);[1318,1568,1976].forEach((f,i)=>place(buf,mul(sine(f,.8),t=>.04*Math.exp(-t*4)),i*.02,1));return verb(buf,1.4,.45,3000)};
+G.ps_win=()=>{const buf=Z(.8);place(buf,psBeep(523,.08,.12),0,1);place(buf,psBeep(784,.12,.12),.09,1);place(buf,mul(lp(noise(.3),2000),t=>.1*Math.exp(-t*12)),0,1);return verb(buf,.5,.3,4000)};
+G.ps_key=()=>{const buf=Z(.3);place(buf,ed(bp(noise(.015),1500,6000),250),0,.9);place(buf,mul(sine(320,.04),t=>.15*Math.exp(-t*60)),0,1);return buf};
+G.ps_del=()=>{const buf=Z(.9);place(buf,mul(lp(pkSq(t=>220-160*t/.25,.25,.5),2500),t=>.1*Math.exp(-t*6)),0,1);for(let k=0;k<12;k++)place(buf,ed(hp(noise(.01),2500),300),.05+k*.025,.25);place(buf,hSub(120,45,.3,9,3),0,.8);return verb(buf,.6,.3,3500)};
+G.ps_flat=()=>{const d=2.2,buf=Z(d+.6);place(buf,psBeep(988,.07,.16),0,1);place(buf,psBeep(988,.07,.16),.42,1);place(buf,mul(add(sine(988,d-.8),sine(1976,d-.8),.12),t=>.16*Math.min(1,t/.01)*Math.min(1,(d-.8-t)/.2)),.84,1);place(buf,hSub(70,30,1,2.5,4),.84,.9);return verb(buf,1.2,.3,4000)};
+G.ps_dots=()=>{const buf=Z(.6);[0,.12,.24].forEach(at=>place(buf,mul(lp(pkSq(196,.05,.5),1500),t=>.06*Math.exp(-t*30)),at,1));return buf};
+['ps_strike','ps_freeze','ps_flat'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
+// ===== 공병은 • 공기묘 (크레이지 골드 · 고라라 러쉬) =====
+// "고라라라" 외침 : 포먼트 음절을 빠르게 반복
+function gmVox(n,step,f0,f1){const d=n*step+.25,buf=Z(d);for(let i=0;i<n;i++){const u=i/(n-1||1),L=step*.9,src=voxSrc(L,t=>(f0+(f1-f0)*u)*(1+.06*Math.sin(PI2*9*t)));const go=i==0;let x=voxSeg(src,go?[[L*.4,[[350,650,1],[700,1000,.6]]],[L*.6,[[600,950,1],[1050,1400,.7],[2300,2900,.2]]]]:[[L*.25,[[300,600,.8],[1200,1700,.5]]],[L*.75,[[650,950,1],[1100,1450,.7],[2400,3000,.2]]]],0);
+  x=mul(x,t=>Math.min(1,t/.006)*Math.exp(-t*6));place(buf,sat(x,2.2),i*step,1)}return buf}
+G.kgm_rush=()=>{const d=1.5,buf=Z(d+.5);place(buf,gmVox(17,.08,230,260),0,.8);for(let k=0;k<28;k++){const at=.1+k*.048+U(0,.01);place(buf,mul(bp(noise(.03),300,2500),t=>.5*Math.exp(-t*80)),at,1);place(buf,hSub(140,60,.08,30,2),at,.35)}return verb(buf,.8,.3,3000)};
+G.kgm_hit=()=>{const buf=Z(.3);place(buf,ed(bp(noise(.03),400,3500),90),0,1);place(buf,hSub(160,70,.1,25,2),0,.6);return buf};
+G.kgm_fin=()=>{const buf=Z(1.6);place(buf,hPunch(1),0,1.4);place(buf,gmVox(2,.16,210,170),0,.9);place(buf,mul(add(sine(880,.6),sine(1320,.6),.5),t=>.06*Math.exp(-t*6)),.02,1);return verb(buf,1.3,.35,2800)};
+G.kgm_break=()=>{const buf=Z(1.4);place(buf,hPunch(0),0,1.2);place(buf,hCrack(.4,100,6000,7),0,1);for(let k=0;k<26;k++)place(buf,ed(bp(noise(.03),500,5000),80),U(.02,.6),U(.1,.3));return verb(buf,1,.3,3000)};
+G.kgm_fix=()=>{const d=.4,buf=Z(d+.8);const w=hWhoosh(d,4000,300);for(let i=0;i<w.length;i++)w[i]*=Math.pow(i/w.length,1.5);place(buf,w,0,1);[987.8,1318.5,1661.2].forEach((f,i)=>place(buf,mul(add(sine(f,.8),sine(f*2,.8),.25),t=>.07*Math.exp(-t*4)),d+i*.03,1));return verb(buf,1,.4,4500)};
+G.kgm_bind=()=>{const buf=Z(1);place(buf,hSub(110,45,.4,7,3),0,1.1);for(let k=0;k<10;k++)place(buf,ed(bp(noise(.02),1200,6000),200),k*.02,.3);place(buf,mul(sine(1480,.5),t=>.05*Math.exp(-t*6)),.02,1);return verb(buf,.8,.35,4000)};
+G.kgm_heal=()=>{const buf=Z(1.4);[659.3,830.6,987.8,1318.5].forEach((f,i)=>place(buf,mul(add(sine(f,1),sine(f*2.005,1),.3),t=>.07*Math.exp(-t*3)),i*.06,1));place(buf,mul(movBP(noise(.6),5000,800,.25),t=>.2*Math.exp(-t*4)),0,1);return verb(buf,1.2,.45,5000)};
+G.kgm_stand=()=>{const d=.7,buf=Z(d+.6);place(buf,mul(movBP(noise(d),300,4000,.2),t=>.5*Math.pow(t/d,1.5)),0,1);place(buf,hSub(90,40,.4,6,3),d-.05,.9);place(buf,mul(add(sine(220,.6),sine(330,.6),.6),t=>.06*Math.exp(-t*4)),d-.05,1);return verb(buf,1,.4,3000)};
+G.kgm_ult=()=>{const d=2.6,buf=Z(d+.5);place(buf,gmVox(30,.08,240,300),.2,.85);for(let k=0;k<70;k++){const at=.2+k*.031+U(0,.008);place(buf,mul(bp(noise(.025),300,2600),t=>.45*Math.exp(-t*90)),at,1);if(k%3==0)place(buf,hSub(140,60,.08,30,2),at,.3)}place(buf,hRumble(d,.6),0,.5);return verb(buf,1.2,.3,3000)};
+['kgm_fin','kgm_break','kgm_bind'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
 window.GENSFX=Object.keys(G);
 // 만들기 순서 : 지금 싸우는 캐릭터 소리를 먼저 · 로딩을 건너뛰어도 게임하면서 끝까지 계속 만듦
 const GL=Object.keys(G),GI={};GL.forEach((n,i)=>GI[n]=i+1);let GQ=GL.slice(),GDONE=0;
