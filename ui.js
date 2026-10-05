@@ -43,7 +43,7 @@ document.querySelectorAll('#grid .tile').forEach(t=>{t.dataset.fv='';paintIc(t.q
 // ===== ui.js : 화면 애니메이션 + 사운드 만들기 우선순위 =====
 
 // ---------- 지금 싸우는 캐릭터 소리를 먼저 만들기 ----------
-const SPFX={dto:['do_','yt_dotti'],bst:['mb_'],gbr:['gb_'],chm:['cm_','yt_cm60'],gms:['gm_','yt_gamwhat'],uzh:['uz_','yt_uzc'],gst:['gs_'],asg:['as_'],mtt:['mt_'],und:['ud_'],flw:['fl_'],pap:['pp_'],psy:['ps_'],kgm:['kgm_'],kaidan:['gk_'],diet:['dt_'],otaku:['ot_'],joker:['jk_'],pkc:['pk_'],kong:['kg_'],cjh:['cj_'],aura:['au_'],horror:['h_'],soccer:['kick','juggle','tackle','whistle','goal'],poop:['tv_'],master:['wm_'],radiant:['rd_'],thief:['th_'],bl:['bl_'],krl:['kr_'],chal:['ch_'],ge:['ge_'],ger:['ge_'],wk:['wk_'],pica:['pc_'],wick:['jw_'],oni:['oni_'],rage:['rg_','oni_'],ttd:['tt_'],kmj:['kj_'],sans:['sn_'],hsol:['hs_'],ezr:['ez_'],jett:['jt_'],terr:['tr_'],gaor:['gl_','mg_'],gapr:['gp_','mg_']};
+const SPFX={mlw:['ml_','yt_jok','yt_igo','yt_mag','yt_mot'],ssm:['ss_'],dto:['do_','yt_dotti'],bst:['mb_'],gbr:['gb_'],chm:['cm_','yt_cm60'],gms:['gm_','yt_gamwhat'],uzh:['uz_','yt_uzc'],gst:['gs_'],asg:['as_'],mtt:['mt_'],und:['ud_'],flw:['fl_'],pap:['pp_'],psy:['ps_'],kgm:['kgm_'],kaidan:['gk_'],diet:['dt_'],otaku:['ot_'],joker:['jk_'],pkc:['pk_'],kong:['kg_'],cjh:['cj_'],aura:['au_'],horror:['h_'],soccer:['kick','juggle','tackle','whistle','goal'],poop:['tv_'],master:['wm_'],radiant:['rd_'],thief:['th_'],bl:['bl_'],krl:['kr_'],chal:['ch_'],ge:['ge_'],ger:['ge_'],wk:['wk_'],pica:['pc_'],wick:['jw_'],oni:['oni_'],rage:['rg_','oni_'],ttd:['tt_'],kmj:['kj_'],sans:['sn_'],hsol:['hs_'],ezr:['ez_'],jett:['jt_'],terr:['tr_'],gaor:['gl_','mg_'],gapr:['gp_','mg_']};
 function sndPri(ks){if(!window.GENPRI||!window.GENSFX)return;const P=[];ks.forEach(k=>(SPFX[k]||[]).forEach(p=>P.push(p)));if(!P.length)return;GENPRI(GENSFX.filter(n=>P.some(p=>n==p||n.startsWith(p))))}
 const _initUI=init;init=function(){const r=_initUI.apply(this,arguments);try{if(F)sndPri(F.map(f=>f.d.k))}catch(e){}return r};
 
@@ -280,8 +280,9 @@ banner=function(){if(typeof CIN!='undefined'&&CIN&&CIN.draw)CIN.draw();if(!bn)re
 // 메뉴 오른쪽 위 작은 버튼 → 지금까지의 대형 업데이트 목록 (새 버전이 나오면 빨간 점)
 // 업데이트할 때 VER 를 올리고 PATCH 맨 위에 한 칸 추가
 // ======================================================================
-const VER='5.3.1';
+const VER='5.4.0';
 const PATCH=[
+  {v:'5.4',t:'MANAGER',s:'말왕과 매니저 씩씩맨',c:[54,55],f:['신규 캐릭터 2명 : 흉악범 • 말왕 · 김건우 • 씩씩맨','말왕 : 장충동 왕족발 보쌈 (족발뼈 휘두르기) · 이거 보세요오오! · 궁 유유유유유유 매그네릭~ · 패시브 이건 못 참지~ (전부 보내준 영상 목소리)','씩씩맨 : ○○맨 룰렛 (씩씩맨 · 횡령맨 · 폐급맨) · 씩씩하게 파이팅! · 궁 크리퍼 토스 · 패시브 Alt+F4 강종 (죽기 직전 강제 종료하고 재접속 · 한 판에 두 번)'],x:['스킬 쓸 때 사진 · 궁극기 썸네일 컷인 · 폐급맨 출근 브이로그 썸네일 카드']},
   {v:'5.3',t:'YOUTUBER',s:'유튜버 6인방 출격',c:[48,49,50,51,52,53],f:['신규 캐릭터 6명 : 도티 · 미스터 비스트 · 겜브링 · 침착맨 · 감스트 · 우주하마','스킬을 쓸 때마다 공 뒤에서 사진이 튀어나옴 · 궁극기는 유튜브 썸네일 컷인','궁극기 배너 · VS 화면에도 사진 초상화','우주하마 궁 "우! 주! 하! 마!" · 침착맨 궁 최고민수 대사는 보내준 영상 목소리 그대로'],x:['도티 : 탈출맵 TNT · 리스폰 · 개웃겨서 도티낳음','미스터 비스트 : $1 vs $1,000,000 룰렛 · LAST TO LEAVE · BEAST GAMES','겜브링 : 야!!!! · 어메이징 프로그 · 피드 앤 그로우 · 버그다!','침착맨 : 킹받네 · 이말년 그림체 · 최고민수 초대석 · 오히려 좋아','감스트 : 슈퍼 슈팅 · 관제탑 댄스 · 이게 뭐야?!','우주하마 : 흔들어 제끼라우! · 앞니 콱 · 우!주!하!마! · 물뚱땡','5.3.1 · 도티 궁 "개웃겨서 도티낳음" (호잇짜! · 왜 나를 낳아? · !짜잇호) · 감스트 궁 "이게 뭐야?!" · 둘 다 보내준 영상 목소리','5.3.1 · 우주하마 1스킬 → 흔들어 제끼라우! (쌈바) · 도티 사진 머리카락 잘리던 것 고침']},
   {v:'5.1.4',t:'ULT LOCK',s:'궁극기 봉인 · 궁 업데이트',c:[],f:['궁극기 봉인 : 누가 궁극기를 쓰면 끝날 때까지 궁극기만 움직임 · 다른 스킬 · 장판 · 소환물 · 탄환 · 쿨타임은 전부 멈췄다가 궁이 끝나면 이어짐 (궁극기를 깔끔하게 보기)','궁 게이지가 시간에 따라 2.5배 빨리 참 (궁을 더 자주 볼 수 있게)','따라잡기 : 체력이 상대보다 적으면 궁 게이지가 더 빨리 참 (최대 2배) · 많으면 더 느리게 참 → 궁 먼저 쓴 쪽이 한 번 더 써서 그냥 이기는 일 줄임','전체 데미지 15% 감소 (궁 한두 방에 판이 끝나지 않게)'],x:['봉인 · 게이지 변화에 맞춰 전체 캐릭터 밸런스 다시 맞춤']},
   {v:'5.1',t:'ENTRY 17',s:'공허에서 온 과학자',c:[47],f:['사전에서 변신 장면 · 변신 후 스킬도 미리보기 (메타톤 · 언다인 · 플라위)'],x:['언더테일 변신 캐릭터 변신 전 체력 낮춤 (메타톤 60 · 언다인 70 · 플라위 85) · 밸런스 다시 맞춤','오메가 플라위 궁극기를 단계별로 보기 쉽게 (① 세이브 ② 파리지옥 ③ X 폭탄 ④ 로드)','언다인 각성 연출에서 그림이 가운데로 오게']},
@@ -308,5 +309,5 @@ function pnMark(){try{localStorage.setItem('jsbb3_ver',VER)}catch(e){}const d=do
 const UTPORT={gst:()=>'ut_gaster',asg:()=>'ut_asgore',mtt:D=>D.mtNeo?'ut_mtt_neo':'ut_mtt_box',und:D=>D.udX?'ut_undyne_x':'ut_undyne',flw:D=>D.flX?'ut_flowey_x':'ut_flowey',pap:()=>'ut_papyrus'};
 const _utSpriteUT=utSprite;utSprite=function(D,cx,cy,S,n){const m=UTPORT[D&&D.k],nm=m&&m(D),o=nm&&typeof UTI!='undefined'&&UTI[nm];if(o&&typeof utDraw=='function'){const sc=Math.min(S/o.w,S/o.h),h=o.h*sc;if(utDraw(nm,cx,cy,h,1,0,1))return}return _utSpriteUT.apply(this,arguments)};
 // 유튜버 6인방 : VS 화면 · 궁극기 배너에 사진 초상화
-const YTPORT={dto:'yt_ddotty',bst:'yt_beast',gbr:'yt_gamb',chm:'yt_chim',gms:'yt_gamst',uzh:'yt_uzu'};
+const YTPORT={mlw:'yt_mlw',ssm:'yt_ssm',dto:'yt_ddotty',bst:'yt_beast',gbr:'yt_gamb',chm:'yt_chim',gms:'yt_gamst',uzh:'yt_uzu'};
 const _utSpriteYT=utSprite;utSprite=function(D,cx,cy,S,n){const nm=YTPORT[D&&D.k],o=nm&&typeof UTI!='undefined'&&UTI[nm];if(o&&typeof ytDraw=='function'){const sc=Math.min(S/o.w,S/o.h)*1.12;if(ytDraw(nm,cx,cy,o.h*sc,1,0,1))return}return _utSpriteYT.apply(this,arguments)};
