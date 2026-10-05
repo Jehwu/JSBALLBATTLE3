@@ -64,8 +64,9 @@
   var L=['core','chars_base','chars_1','chars_2','chars_3','modes','chars_4','ui','clips','sound'],i=0,bad=[];
   function err(m){var d=document.getElementById('lderr');d.style.display='block';d.textContent+=m+'\n'}
   window.addEventListener('error',function(e){if(e.message)err('오류: '+e.message+(e.filename?' ('+e.filename.split('/').pop()+' '+e.lineno+'줄)':''))});
-  function load(n,dirs){if(!dirs.length){bad.push(n+'.js');err('못 찾은 파일: '+n+'.js');next();return}
-    var s=document.createElement('script');s.src=dirs[0]+n+'.js';s.onload=next;s.onerror=function(){s.remove();load(n,dirs.slice(1))};document.body.appendChild(s)}
+  // 못 불러오면 (인터넷이 잠깐 끊기거나 업데이트가 올라가는 중) 1.2초 뒤에 두 번 더 시도
+  function load(n,dirs,rt){rt=rt||0;if(!dirs.length){if(rt<2){setTimeout(function(){load(n,['','js/'],rt+1)},1200);return}bad.push(n+'.js');err('못 찾은 파일: '+n+'.js');next();return}
+    var s=document.createElement('script');s.src=dirs[0]+n+'.js'+(rt?'?r='+Date.now():'');s.onload=next;s.onerror=function(){s.remove();load(n,dirs.slice(1),rt)};document.body.appendChild(s)}
   var TIPS=['팁 · 설정에서 소리마다 볼륨을 따로 조절할 수 있어','팁 · 캐릭터 선택에서 +숫자가 붙은 캐릭터는 변형이 있어','팁 · 사전에서 스킬을 누르면 미리보기를 볼 수 있어','팁 · 박르노는 체력이 낮아지면 레퀴엠으로 각성해 · 사전에서 레퀴엠 기술도 미리 볼 수 있어'],t0=0,ready=0;
   function bar(p,txt){document.getElementById('ldfill').style.width=Math.round(p*100)+'%';document.getElementById('ldpct').textContent=Math.round(p*100)+'%';if(txt)document.getElementById('ldtxt').textContent=txt}
   var ti=0;setInterval(function(){var e=document.getElementById('ldtip');if(e)e.textContent=TIPS[ti++%TIPS.length]},2600);document.getElementById('ldtip').textContent=TIPS[0];ti=1;
