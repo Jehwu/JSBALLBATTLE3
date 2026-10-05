@@ -43,7 +43,7 @@ document.querySelectorAll('#grid .tile').forEach(t=>{t.dataset.fv='';paintIc(t.q
 // ===== ui.js : 화면 애니메이션 + 사운드 만들기 우선순위 =====
 
 // ---------- 지금 싸우는 캐릭터 소리를 먼저 만들기 ----------
-const SPFX={asg:['as_'],mtt:['mt_'],und:['ud_'],flw:['fl_'],pap:['pp_'],psy:['ps_'],kgm:['kgm_'],kaidan:['gk_'],diet:['dt_'],otaku:['ot_'],joker:['jk_'],pkc:['pk_'],kong:['kg_'],cjh:['cj_'],aura:['au_'],horror:['h_'],soccer:['kick','juggle','tackle','whistle','goal'],poop:['tv_'],master:['wm_'],radiant:['rd_'],thief:['th_'],bl:['bl_'],krl:['kr_'],chal:['ch_'],ge:['ge_'],ger:['ge_'],wk:['wk_'],pica:['pc_'],wick:['jw_'],oni:['oni_'],rage:['rg_','oni_'],ttd:['tt_'],kmj:['kj_'],sans:['sn_'],hsol:['hs_'],ezr:['ez_'],jett:['jt_'],terr:['tr_'],gaor:['gl_','mg_'],gapr:['gp_','mg_']};
+const SPFX={gst:['gs_'],asg:['as_'],mtt:['mt_'],und:['ud_'],flw:['fl_'],pap:['pp_'],psy:['ps_'],kgm:['kgm_'],kaidan:['gk_'],diet:['dt_'],otaku:['ot_'],joker:['jk_'],pkc:['pk_'],kong:['kg_'],cjh:['cj_'],aura:['au_'],horror:['h_'],soccer:['kick','juggle','tackle','whistle','goal'],poop:['tv_'],master:['wm_'],radiant:['rd_'],thief:['th_'],bl:['bl_'],krl:['kr_'],chal:['ch_'],ge:['ge_'],ger:['ge_'],wk:['wk_'],pica:['pc_'],wick:['jw_'],oni:['oni_'],rage:['rg_','oni_'],ttd:['tt_'],kmj:['kj_'],sans:['sn_'],hsol:['hs_'],ezr:['ez_'],jett:['jt_'],terr:['tr_'],gaor:['gl_','mg_'],gapr:['gp_','mg_']};
 function sndPri(ks){if(!window.GENPRI||!window.GENSFX)return;const P=[];ks.forEach(k=>(SPFX[k]||[]).forEach(p=>P.push(p)));if(!P.length)return;GENPRI(GENSFX.filter(n=>P.some(p=>n==p||n.startsWith(p))))}
 const _initUI=init;init=function(){const r=_initUI.apply(this,arguments);try{if(F)sndPri(F.map(f=>f.d.k))}catch(e){}return r};
 
@@ -280,8 +280,9 @@ banner=function(){if(typeof CIN!='undefined'&&CIN&&CIN.draw)CIN.draw();if(!bn)re
 // 메뉴 오른쪽 위 작은 버튼 → 지금까지의 대형 업데이트 목록 (새 버전이 나오면 빨간 점)
 // 업데이트할 때 VER 를 올리고 PATCH 맨 위에 한 칸 추가
 // ======================================================================
-const VER='5.0.1';
+const VER='5.1.0';
 const PATCH=[
+  {v:'5.1',t:'ENTRY 17',s:'공허에서 온 과학자 · 궁극기 봉인',c:[47],f:['궁극기 봉인 : 누가 궁극기를 쓰면 그동안 다른 캐릭터는 스킬을 못 씀 (최대 3초 · 쿨타임은 계속 돎 · 1대1 · 3인전)','사전에서 변신 장면 · 변신 후 스킬도 미리보기 (메타톤 · 언다인 · 플라위)'],x:['언더테일 변신 캐릭터 변신 전 체력 낮춤 (메타톤 60 · 언다인 70 · 플라위 85) · 밸런스 다시 맞춤','오메가 플라위 궁극기를 단계별로 보기 쉽게 (① 세이브 ② 파리지옥 ③ X 폭탄 ④ 로드)','언다인 각성 연출에서 그림이 가운데로 오게']},
   {v:'5.0',t:'UNDERTALE',s:'언더테일 5인방 상륙',c:[42,43,44,45,46],f:['변신하는 캐릭터 3명 : 메타톤 (상자 → NEO) · 언다인 (쓰러지면 THE UNDYING) · 플라위 (영혼 6개 → 오메가)','언더테일 도트 그림이 공 뒤에 함께 등장 · VS 화면 · 궁극기 배너에도 도트 초상화','파랑 · 주황 공격 (파랑은 움직이면, 주황은 멈춰 있으면 아픔)','메뉴 오른쪽 위 패치노트 · 버전 표시'],x:['그림 자리에 gif · mp4 를 넣으면 움직이는 그림으로 나옴','5.0.1 · 폰에서 게임 파일을 못 불러오던 문제 수정 (없는 효과음 파일 요청을 확 줄임)']},
   {v:'4.5',t:'C.H.A.O.S',s:'혼돈의 모드 · 도전 모드 2.0',c:[40,41],f:['C.H.A.O.S 모드 : 봇으로 시작 · 랜덤 스킬 3개 · 라운드마다 스킬 증강 · 5라운드','도전 모드 2.0 : 갈림길 지도 · 상점 · 이벤트 · 유물'],x:['카오스에서 내 캐릭터 표시 · 다시 시작 버그 수정','캐릭터 공방 모드 정리']},
   {v:'4.0',t:'언더테일 스타일',s:'스킬 배너 · VS · 설정',c:[36,37,38,39],f:['스킬 · 궁극기 배너가 언더테일 대사 상자로','새 VS 연출 (심장 → 전투 상자 → VS 베기)','설정 : 캐릭터별 효과음 켜고 끄기'],x:['사전 스킬 설명 잘림 수정','아이콘을 네온 스타일로 통일']},
@@ -302,5 +303,5 @@ function pnMark(){try{localStorage.setItem('jsbb3_ver',VER)}catch(e){}const d=do
   const close=()=>{o.classList.remove('on');try{SFX('click')}catch(e){}};o.querySelector('.pnx').addEventListener('click',close);o.addEventListener('click',e=>{if(e.target==o)close()});
   b.addEventListener('click',e=>{e.stopPropagation();try{audioOn();SFX('click')}catch(x){}paint(L.querySelector('.pnc.open')||L);o.classList.add('on');L.scrollTop=0;pnMark()})})();
 // ---------- 언더테일 5인방 : VS · 궁극기 배너의 도트 초상화를 실제 그림으로 ----------
-const UTPORT={asg:()=>'ut_asgore',mtt:D=>D.mtNeo?'ut_mtt_neo':'ut_mtt_box',und:D=>D.udX?'ut_undyne_x':'ut_undyne',flw:D=>D.flX?'ut_flowey_x':'ut_flowey',pap:()=>'ut_papyrus'};
+const UTPORT={gst:()=>'ut_gaster',asg:()=>'ut_asgore',mtt:D=>D.mtNeo?'ut_mtt_neo':'ut_mtt_box',und:D=>D.udX?'ut_undyne_x':'ut_undyne',flw:D=>D.flX?'ut_flowey_x':'ut_flowey',pap:()=>'ut_papyrus'};
 const _utSpriteUT=utSprite;utSprite=function(D,cx,cy,S,n){const m=UTPORT[D&&D.k],nm=m&&m(D),o=nm&&typeof UTI!='undefined'&&UTI[nm];if(o&&typeof utDraw=='function'){const sc=Math.min(S/o.w,S/o.h),h=o.h*sc;if(utDraw(nm,cx,cy,h,1,0,1))return}return _utSpriteUT.apply(this,arguments)};

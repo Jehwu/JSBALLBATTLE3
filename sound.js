@@ -710,6 +710,22 @@ G.pp_spag=()=>{const buf=Z(1.2);place(buf,mul(movBP(noise(.45),600,2400,.25),t=>
 G.pp_fail=()=>{const buf=Z(1);[392,329.6,261.6].forEach((f,i)=>place(buf,utSq(f,.12,.5,.2,2400),i*.12,1));place(buf,mul(bp(noise(.3),1500,7000),t=>.3*Math.exp(-t*9)),.36,1);return verb(buf,.6,.25,3000)};
 ['as_erupt','as_break','mt_boom','mt_zap','mt_heart','ud_throw','fl_boom','pp_giant'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
 Object.assign(PK,{as_text:.4,as_menu:.5,as_hit:.8,as_orb:.6,mt_tick:.4,mt_beep:.5,mt_rate:.5,mt_drop:.6,mt_right:.7,ud_fly:.5,ud_block:.6,ud_hit:.7,ud_ding:.55,ud_spear:.7,fl_pellet:.55,fl_soul:.65,fl_trap:.6,fl_hee:.7,pp_bone:.6,pp_jump:.45,pp_puzzle:.45,pp_zap:.6,pp_nyeh:.8});
+// --- 가스터 (기괴하게 · 반대로 재생 · 어긋난 음) ---
+const gsRev=x=>{const y=new Float32Array(x.length);for(let i=0;i<x.length;i++)y[i]=x[x.length-1-i];return y};
+const gsBeat=(f1,f2,d,a)=>mul(add(sine(f1,d),sine(f2,d),1),t=>(a||.1)*Math.min(1,t/.05)*Math.min(1,(d-t)/.2));
+G.gs_hand=()=>{const buf=Z(1.2);place(buf,gsRev(mul(movBP(noise(.5),3000,500,.25),t=>.5*Math.exp(-t*5))),0,.8);place(buf,gsBeat(466.2,659.3,.8,.07),.35,1);place(buf,gsBeat(468,662,.8,.05),.38,1);return verb(buf,1.2,.45,3000)};
+G.gs_charge=()=>{const d=.55,buf=Z(d+.6);place(buf,mul(add(sweepEnv(380,2400,d,1.5),sweepEnv(392,2470,d,1.5),1),t=>.1*Math.min(1,t/.05)*(.6+.4*Math.sin(PI2*24*t))),0,1);place(buf,gsRev(mul(hp(noise(d),3000),t=>.3*Math.exp(-t*7))),0,.6);return verb(buf,.8,.4,4000)};
+G.gs_laser=()=>{const d=.5,buf=Z(d+.6);place(buf,sat(mul(add(saw(880,d,8),saw(887,d,8),1),t=>.12*Math.min(1,t/.005)*Math.exp(-t*5)),1.8),0,1);place(buf,mul(hp(noise(d),4500),t=>.25*Math.exp(-t*8)),0,1);place(buf,hSub(140,40,.3,9,3),0,.7);place(buf,mul(chip(.12,5000),t=>.15*Math.exp(-t*25)),0,1);return verb(buf,.9,.35,4500)};
+G.gs_web=()=>{const d=1.6,buf=Z(d+.6);[220,233.1,311.1,329.6].forEach((f,i)=>place(buf,mul(sine(f,d),t=>.08*Math.min(1,t/.15)*Math.min(1,(d-t)/.4)*(.6+.4*Math.sin(PI2*(1.3+i*.7)*t))),0,1));place(buf,mul(lp(saw(55,d,10),400),t=>.15*Math.min(1,t/.2)*Math.min(1,(d-t)/.4)),0,1);return verb(buf,1.4,.45,2500)};
+G.gs_shatter=()=>{const buf=Z(1.4);place(buf,hCrack(.35,800,9000,9),0,1);place(buf,mul(chip(.3,2200),t=>.3*Math.exp(-t*9)),0,1);for(let k=0;k<10;k++)place(buf,mul(sine(U(900,3600),.15),t=>.1*Math.exp(-t*24)),U(0,.2),1);place(buf,gsRev(mul(hp(noise(.4),2000),t=>.2*Math.exp(-t*6))),.25,.5);return verb(buf,1.1,.4,4000)};
+G.gs_reform=()=>{const x=Z(.9);[1318.5,1661.2,1975.5,2489].forEach((f,i)=>place(x,mul(sine(f,.6),t=>.12*Math.exp(-t*5)),i*.04,1));const buf=Z(1.1);place(buf,gsRev(verb(x,.6,.4,6000)).slice(0,N(1)),0,1);return buf};
+G.gs_void=()=>{const d=2,buf=Z(d+.8);place(buf,mul(sweepEnv(52,30,d),t=>.4*Math.min(1,t/.3)*Math.min(1,(d-t)/.5)),0,1);place(buf,mul(lp(add(saw(55,d,10),saw(58.3,d,10),1),500),t=>.18*Math.min(1,t/.4)*Math.min(1,(d-t)/.5)),0,1);place(buf,mul(movBP(noise(d),200,1200,.3),t=>.25*Math.min(1,t/.5)*Math.min(1,(d-t)/.5)),0,1);place(buf,gsBeat(932.3,987.8,1.4,.03),.3,1);return verb(buf,1.8,.5,1800)};
+G.gs_text=()=>{const buf=Z(.9);[0,.11,.22,.33].forEach((at,i)=>{const f=[740,523,880,622][i];place(buf,mul(T(.06,t=>Math.sin(PI2*f*t)*(((f*.5*t)%1)<.5?1:-1)),t=>.18*Math.min(1,(.06-t)/.01)),at,1)});return verb(buf,.8,.45,3500)};
+G.gs_ult=()=>{const d=1.8,buf=Z(d+.8);place(buf,hPunch(1),0,1.1);[110,155.6,164.8,233.1].forEach(f=>place(buf,sat(mul(lp(saw(f,d,12),2600),t=>.07*Math.exp(-t*1.8)),1.6),0,1));place(buf,mul(hp(noise(.8),2500),t=>.4*Math.exp(-t*4)),0,1);place(buf,mul(chip(.5,1800),t=>.2*Math.exp(-t*5)),.05,1);return verb(buf,1.6,.4,3000)};
+G.gs_glitch=()=>{const buf=Z(1);for(let k=0;k<9;k++){const at=k*.08+U(0,.02);place(buf,mul(chip(.05,U(800,6000)),t=>.3),at,1);if(k%3==0)place(buf,mul(sine(U(200,1600),.05),t=>.15),at,1)}return verb(buf,.5,.3,4000)};
+G.gs_drone=()=>{const d=2.2,buf=Z(d+.6);place(buf,gsBeat(110,116.5,d,.12),0,1);place(buf,gsBeat(164.8,174.6,d,.06),0,1);return verb(buf,1.6,.5,1500)};
+['gs_ult','gs_laser','gs_shatter'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
+Object.assign(PK,{gs_text:.55,gs_hand:.75,gs_charge:.7,gs_reform:.6,gs_glitch:.6});
 window.GENSFX=Object.keys(G);
 // 만들기 순서 : 지금 싸우는 캐릭터 소리를 먼저 · 로딩을 건너뛰어도 게임하면서 끝까지 계속 만듦
 const GL=Object.keys(G),GI={};GL.forEach((n,i)=>GI[n]=i+1);let GQ=GL.slice(),GDONE=0;

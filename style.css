@@ -748,3 +748,8 @@ body.m{font-family:var(--ut-f)}
 #pnote .pnd li{font:400 12px/1.5 var(--ut-f);color:#e8e8e8;padding-left:14px;position:relative}
 #pnote .pnd li:before{content:'*';position:absolute;left:0;color:#fff}
 #pnote .pnd ul.pnx2 li{color:#b8b8b8}
+.p.ulk .sk{opacity:.35;filter:grayscale(1)}
+
+/* ▶ 섹션 : 궁극기 봉인 */
+#hud .p.ulk .sk{opacity:.35;filter:grayscale(1)}
+#hud .p.ulk .nm b:after{content:' 🔒';font-size:.8em}
