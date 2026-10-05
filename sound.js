@@ -629,6 +629,87 @@ G.kgm_heal=()=>{const buf=Z(1.4);[659.3,830.6,987.8,1318.5].forEach((f,i)=>place
 G.kgm_stand=()=>{const d=.7,buf=Z(d+.6);place(buf,mul(movBP(noise(d),300,4000,.2),t=>.5*Math.pow(t/d,1.5)),0,1);place(buf,hSub(90,40,.4,6,3),d-.05,.9);place(buf,mul(add(sine(220,.6),sine(330,.6),.6),t=>.06*Math.exp(-t*4)),d-.05,1);return verb(buf,1,.4,3000)};
 G.kgm_ult=()=>{const d=2.6,buf=Z(d+.5);place(buf,gmVox(30,.08,240,300),.2,.85);for(let k=0;k<70;k++){const at=.2+k*.031+U(0,.008);place(buf,mul(bp(noise(.025),300,2600),t=>.45*Math.exp(-t*90)),at,1);if(k%3==0)place(buf,hSub(140,60,.08,30,2),at,.3)}place(buf,hRumble(d,.6),0,.5);return verb(buf,1.2,.3,3000)};
 ['kgm_fin','kgm_break','kgm_bind'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
+// ===== 언더테일 5인방 (도트 게임 느낌 · 어둡게) =====
+const utSq=(f,d,duty,a,cut)=>mul(lp(pkSq(f,d,duty||.5),cut||3200),t=>(a||.3)*Math.min(1,t/.002)*Math.min(1,(d-t)/.006));
+function utSyl(L,f0,f1,F,br){const src=voxSrc(L,t=>f0+(f1-f0)*t/L);const x=voxSeg(src,[[L,F]],br||0);return mul(x,t=>Math.min(1,t/.012)*Math.min(1,(L-t)/(L*.35)))}
+const utShing=(f,d)=>{const x=Z(d);[1,1.5,2.24,3.1].forEach((r,i)=>add(x,mul(sine(f*r,d),t=>Math.exp(-t*(6+i*4))),.5/(i+1)));add(x,mul(hp(noise(d),5000),t=>.25*Math.exp(-t*30)),1);return x};
+const utCrk=(d,n,lo,hi)=>{const x=Z(d);for(let k=0;k<n;k++)place(x,ed(bp(noise(.02),lo||800,hi||5000),U(120,260)),U(0,d-.03),U(.15,.45));return x};
+// --- 아스고어 ---
+G.as_ring=()=>{const d=.8,buf=Z(d+.5);place(buf,mul(movBP(noise(d),300,1800,.25),t=>.6*Math.sin(Math.PI*t/d)),0,1);place(buf,utCrk(d,22,900,5000),0,.8);place(buf,mul(sine(55,d),t=>.25*Math.sin(Math.PI*t/d)),0,1);return verb(buf,.9,.35,3000)};
+G.as_fire=()=>{const d=.65,buf=Z(d+.5);place(buf,hWhoosh(d,2200,380),0,1);place(buf,utCrk(d,14),0,.7);place(buf,hSub(110,40,.4,7,3),d-.08,.8);return verb(buf,.8,.3,2800)};
+G.as_draw=()=>{const buf=Z(1.6);place(buf,utShing(740,1),0,.9);place(buf,mul(sine(55,1.2),t=>.35*Math.min(1,t/.15)*Math.exp(-t*2.2)),0,1);place(buf,mul(movBP(noise(.5),400,3000,.2),t=>.35*Math.exp(-t*5)),0,1);return verb(buf,1.3,.4,2600)};
+G.as_swing=()=>{const buf=Z(1);place(buf,sat(hWhoosh(.42,180,2600),1.8),0,1.1);place(buf,hSub(90,40,.3,9,3),0,.7);place(buf,mul(sine(440,.3),t=>.05*Math.exp(-t*12)),.18,1);return verb(buf,.6,.3,2600)};
+G.as_hit=()=>{const buf=Z(.7);let ph=0;place(buf,mul(lp(T(.2,t=>{ph+=(320-1100*t)/SR;return(ph%1)<.5?1:-1}),2400),t=>.3*Math.exp(-t*12)),0,1);place(buf,hCrack(.15,500,6000,22),0,.6);place(buf,hSub(130,45,.3,10,3),0,.9);return verb(buf,.5,.25,2800)};
+G.as_menu=()=>{const buf=Z(.3);place(buf,utSq(523,.045,.5,.3,2600),0,1);place(buf,utSq(784,.06,.5,.3,2600),.05,1);return buf};
+G.as_break=()=>{const buf=Z(1.3);for(let k=0;k<26;k++)place(buf,utSq(U(900,3200),U(.02,.05),.5,.22,6000),U(0,.35),U(.4,1));place(buf,hCrack(.45,700,8000,7),0,.9);place(buf,hSub(160,50,.3,10,3),0,.7);return verb(buf,.9,.3,4500)};
+G.as_stab=()=>{const buf=Z(1.4);place(buf,sat(hWhoosh(.32,4000,220),1.6),0,1);place(buf,mul(sweepEnv(900,120,.3),t=>.12*Math.exp(-t*6)),0,1);return verb(buf,.8,.3,3000)};
+G.as_erupt=()=>{const d=1.6,buf=Z(d+.6);place(buf,hPunch(1),0,1.2);place(buf,mul(movBP(noise(d),2200,280,.3),t=>.7*Math.exp(-t*2.2)),0,1);place(buf,hRumble(d,1.8),0,.8);place(buf,utCrk(d,40,700,6000),0,.6);place(buf,mul(add(sine(110,1.2),sine(116,1.2),.8),t=>.08*Math.exp(-t*3)),0,1);return verb(buf,1.5,.35,2600)};
+G.as_orb=()=>{const buf=Z(.8);place(buf,hWhoosh(.3,600,2400),0,.7);place(buf,utCrk(.35,8),0,.5);place(buf,mul(sine(220,.4),t=>.08*Math.exp(-t*8)),0,1);return verb(buf,.6,.3,3000)};
+G.as_text=()=>{const buf=Z(.08);place(buf,utSq(98,.055,.5,.35,1300),0,1);return buf};
+// --- 메타톤 ---
+G.mt_quiz=()=>{const buf=Z(1.2);[523.3,659.3,784,1046.5].forEach((f,i)=>place(buf,utSq(f,.08,.25,.22,4000),i*.07,1));place(buf,bell(1568,.8,3),.3,.18);place(buf,mul(sine(65,.6),t=>.15*Math.exp(-t*4)),.28,1);return verb(buf,.8,.3,4000)};
+G.mt_tick=()=>{const buf=Z(.12);place(buf,ed(bp(noise(.01),1500,6000),400),0,.7);place(buf,mul(sine(1500,.03),t=>.2*Math.exp(-t*90)),0,1);return buf};
+G.mt_right=()=>{const buf=Z(1);place(buf,bell(1046.5,.7,4),0,.35);place(buf,bell(1318.5,.8,4),.12,.35);return verb(buf,.7,.3,5000)};
+G.mt_wrong=()=>{const buf=Z(.8);place(buf,mul(lp(add(pkSq(110,.5,.5),pkSq(117,.5,.5),1),1400),t=>.3*Math.min(1,t/.01)*Math.min(1,(.5-t)/.05)),0,1);return verb(buf,.4,.2,2000)};
+G.mt_zap=()=>{const d=.5,buf=Z(d+.4);place(buf,sat(mul(bp(noise(d),2000,9000),t=>.8*Math.exp(-t*6)*(.35+.65*Math.abs(Math.sin(PI2*48*t)))),2),0,1);place(buf,hSub(140,40,.35,8,3),0,.9);place(buf,hCrack(.1,1000,8000,30),0,.7);return verb(buf,.6,.25,4000)};
+G.mt_drop=()=>{const buf=Z(.5);place(buf,mul(lp(pkSq(t=>1400-900*t/.25,.25,.5),3000),t=>.12*Math.min(1,t/.01)),0,1);place(buf,hSub(120,60,.15,18,2),.24,.7);return buf};
+G.mt_beep=()=>{const buf=Z(.3);place(buf,utSq(1760,.06,.5,.2,5000),0,1);place(buf,utSq(1760,.06,.5,.2,5000),.12,1);return buf};
+G.mt_boom=()=>{const buf=Z(1.1);place(buf,hPunch(0),0,1);place(buf,mul(chip(.3,3000),t=>.35*Math.exp(-t*9)),0,1);place(buf,hCrack(.25,300,6000,10),0,.7);return verb(buf,.8,.3,3000)};
+G.mt_onair=()=>{const buf=Z(1.4);place(buf,mul(lp(saw(55,.7,10),900),t=>.25*Math.min(1,t/.3)*Math.exp(-t*1.5)),0,1);place(buf,ed(bp(noise(.03),500,4000),120),.32,.8);[392,493.9,622.3].forEach((f,i)=>place(buf,utSq(f,.5,.25,.12,3000),.34+i*.02,1));return verb(buf,1,.35,3500)};
+G.mt_light=()=>{const buf=Z(.9);place(buf,ed(bp(noise(.03),200,2500),90),0,1);place(buf,hSub(90,50,.2,12,2.5),0,.8);place(buf,mul(lp(saw(60,.6,8),600),t=>.12*Math.exp(-t*4)),.02,1);return verb(buf,.7,.3,2500)};
+G.mt_break=()=>{const buf=Z(1.4);place(buf,hCrack(.5,600,9000,6),0,1);for(let k=0;k<18;k++)place(buf,mul(sine(U(1200,4200),.2),t=>.12*Math.exp(-t*20)),U(0,.5),1);place(buf,hPunch(0),0,.8);return verb(buf,1,.35,4500)};
+G.mt_ohyes=()=>{const d=1.8,buf=Z(d+.8);place(buf,mul(sweepEnv(180,1600,.9,1.6),t=>.15*Math.min(1,t/.2)),0,1);for(let k=0;k<20;k++)place(buf,bell(U(1600,4200),.5,8),.4+U(0,.6),.08);
+  [[220,277.2,329.6,415.3,493.9]].forEach(ch=>ch.forEach(f=>place(buf,mul(lp(saw(f,1.1,12),2600),t=>.06*Math.min(1,t/.01)*Math.exp(-t*2)),.92,1)));place(buf,hPunch(1),.9,.9);return verb(buf,1.6,.4,4000)};
+G.mt_charge=()=>{const d=.55,buf=Z(d+.4);place(buf,mul(sweepEnv(200,2200,d,1.3),t=>.2*Math.min(1,t/.05)*(.7+.3*Math.sin(PI2*30*t))),0,1);place(buf,mul(hp(noise(d),4000),t=>.15*t/d),0,1);return verb(buf,.5,.3,4500)};
+G.mt_beam=()=>{const d=.55,buf=Z(d+.6);place(buf,sat(mul(lp(add(saw(220,d,10),saw(226,d,10),1),3500),t=>.3*Math.min(1,t/.01)*Math.exp(-t*3)),2),0,1);place(buf,mul(bp(noise(d),1500,7000),t=>.4*Math.exp(-t*5)),0,1);place(buf,hSub(120,40,.4,6,3),0,.9);return verb(buf,.8,.3,4000)};
+G.mt_disco=()=>{const buf=Z(1.4);for(let k=0;k<16;k++)place(buf,mul(sine(U(1800,4800),.25),t=>.09*Math.exp(-t*12)),U(0,.8),1);place(buf,mul(sine(55,1),t=>.18*Math.abs(Math.sin(PI2*2*t))*Math.exp(-t*1.2)),0,1);return verb(buf,1,.4,5000)};
+G.mt_laser=()=>{const d=1.2,buf=Z(d+.4);place(buf,mul(movBP(saw(110,d,14),400,2400,.3),t=>.35*Math.min(1,t/.05)*Math.min(1,(d-t)/.2)),0,1);place(buf,mul(saw(165,d,8),t=>.05*Math.min(1,(d-t)/.2)),0,1);return verb(buf,.6,.3,3500)};
+G.mt_crowd=()=>{const d=1.6,buf=Z(d+.5);place(buf,mul(crowdN(d),t=>.5*Math.min(1,t/.15)*Math.min(1,(d-t)/.6)),0,1);for(let k=0;k<30;k++)place(buf,clap(),U(.05,1.2),U(.1,.3));return verb(buf,1,.35,4000)};
+G.mt_heart=()=>{const d=1.4,buf=Z(d+.7);place(buf,hPunch(1),0,1.1);place(buf,sat(mul(lp(add(saw(277.2,d,12),saw(329.6,d,12),.8),3000),t=>.2*Math.exp(-t*2)),2),0,1);for(let k=0;k<12;k++)place(buf,bell(U(1800,3600),.4,9),U(0,.6),.07);return verb(buf,1.4,.4,4000)};
+G.mt_rate=()=>{const buf=Z(.5);place(buf,utSq(1318.5,.05,.25,.2,6000),0,1);place(buf,utSq(1760,.12,.25,.2,6000),.05,1);place(buf,ed(hp(noise(.08),5000),40),.04,.2);return verb(buf,.3,.2,6000)};
+// --- 언다인 ---
+G.ud_spear=()=>{const buf=Z(.8);place(buf,utShing(1320,.5),0,.6);place(buf,hWhoosh(.18,1500,5000),0,.4);return verb(buf,.5,.3,5000)};
+G.ud_fly=()=>{const buf=Z(.3);place(buf,hWhoosh(.16,1800,6000),0,1);return buf};
+G.ud_hit=()=>{const buf=Z(.5);let ph=0;place(buf,mul(lp(T(.12,t=>{ph+=(420-2400*t)/SR;return(ph%1)<.5?1:-1}),3000),t=>.25*Math.exp(-t*16)),0,1);place(buf,hCrack(.08,1200,7000,40),0,.7);place(buf,hSub(150,60,.15,16,2.5),0,.6);return buf};
+G.ud_block=()=>{const buf=Z(.5);place(buf,utSq(1568,.05,.5,.22,7000),0,1);place(buf,bell(2093,.3,14),.005,.25);return verb(buf,.3,.25,6000)};
+G.ud_green=()=>{const buf=Z(1);place(buf,bell(659.3,.7,4),0,.3);place(buf,bell(987.8,.8,4),.06,.25);place(buf,utSq(329.6,.12,.5,.1,2000),0,1);return verb(buf,.7,.3,4500)};
+G.ud_rise=()=>{const buf=Z(1);for(let k=0;k<6;k++)place(buf,utShing(U(1000,1600),.3),k*.02,.18);place(buf,hCrack(.2,200,3000,14),0,.7);place(buf,hSub(110,50,.2,12,2.5),0,.6);return verb(buf,.6,.3,4000)};
+G.ud_ngah=()=>{const L=.9,buf=Z(L+.6);place(buf,sat(utSyl(L,210,330,[[650,1000,1],[1100,1500,.75],[2400,3100,.3]],.18),2.6),0,1);place(buf,sat(utSyl(L,105,160,[[300,700,1],[900,1300,.5]],.05),2),0,.5);return verb(buf,.9,.3,3200)};
+G.ud_throw=()=>{const buf=Z(1.4);place(buf,mul(sweepEnv(300,1800,.25,1.4),t=>.12),0,1);place(buf,sat(hWhoosh(.35,800,5000),1.5),.2,1);place(buf,hPunch(1),.5,.9);place(buf,utShing(990,.6),.5,.4);return verb(buf,1,.3,3500)};
+G.ud_crack=()=>{const buf=Z(1);place(buf,utSq(196,.05,.5,.3,2000),0,1);place(buf,hCrack(.12,1500,8000,30),0,.8);place(buf,utSq(147,.06,.5,.3,2000),.18,1);place(buf,hCrack(.15,1000,8000,24),.18,.8);return verb(buf,.8,.35,3000)};
+G.ud_reform=()=>{const buf=Z(2.4);place(buf,mul(hp(noise(.8),2500),t=>.4*Math.pow(t/.8,2.5)),0,1);place(buf,hPunch(1),.8,1.1);[293.7,440,587.3,659.3].forEach(f=>place(buf,mul(lp(saw(f,1.4,12),3000),t=>.06*Math.exp(-t*1.6)),.8,1));place(buf,mul(sine(49,1.2),t=>.3*Math.exp(-t*2)),.8,1);return verb(buf,1.8,.4,4000)};
+G.ud_beat=()=>{const buf=Z(.8);place(buf,hSub(80,40,.2,14,3),0,1);place(buf,hSub(70,36,.2,14,3),.2,.8);return verb(buf,.6,.3,1500)};
+G.ud_ding=()=>{const buf=Z(.4);place(buf,utSq(1046.5,.07,.5,.22,5000),0,1);place(buf,utSq(1046.5,.07,.5,.22,5000),.12,1);return buf};
+// --- 플라위 ---
+function flLaugh(n,f0,f1,step,L){const d=n*step+.4,buf=Z(d);for(let i=0;i<n;i++){const u=i/(n-1||1),f=f0+(f1-f0)*u;place(buf,utSyl(L,f*1.08,f*.92,[[250,450,1],[2000,2800,.75],[3000,3600,.3]],.08),i*step,1-.2*u)}return buf}
+G.fl_laugh=()=>{const buf=Z(2.4);place(buf,sat(flLaugh(7,440,330,.2,.15),1.6),0,.9);place(buf,sat(flLaugh(7,150,110,.2,.15),2.4),.01,.55);place(buf,mul(sine(41,1.8),t=>.1*Math.min(1,t/.2)*Math.exp(-t*1.4)),0,1);return hPhone(verb(buf,1.3,.35,2600))};
+G.fl_hee=()=>{const buf=Z(1);place(buf,sat(flLaugh(3,480,420,.13,.1),1.5),0,1);return verb(buf,.6,.3,3500)};
+G.fl_pellet=()=>{const buf=Z(.6);[1568,2093,2637].forEach((f,i)=>place(buf,mul(sine(f,.15),t=>.12*Math.exp(-t*25)),i*.05,1));return verb(buf,.5,.35,6000)};
+G.fl_close=()=>{const buf=Z(.9);place(buf,mul(sweepEnv(400,1600,.45,1.4),t=>.12*Math.sin(Math.PI*t/.45)),0,1);for(let k=0;k<12;k++)place(buf,mul(sine(U(2000,3500),.03),t=>.1*Math.exp(-t*80)),k*.035,1);return verb(buf,.5,.3,5000)};
+G.fl_vine=()=>{const buf=Z(1);place(buf,mul(lp(noise(.25),900),t=>.6*Math.exp(-t*14)),0,1);place(buf,hCrack(.25,200,2600,14),0,.7);place(buf,ed(hp(noise(.03),2500),140),.12,.8);place(buf,hWhoosh(.2,800,3500),.08,.5);return verb(buf,.6,.3,3000)};
+G.fl_soul=()=>{const buf=Z(1.2);[784,987.8,1174.7].forEach((f,i)=>place(buf,bell(f,.6,5),i*.07,.22));place(buf,mul(hp(noise(.5),5000),t=>.1*Math.sin(Math.PI*t/.5)),0,1);return verb(buf,1,.4,5000)};
+G.fl_static=()=>{const d=1.2,buf=Z(d+.3);place(buf,mul(chip(d,6000),t=>.28*Math.min(1,t/.02)*Math.min(1,(d-t)/.1)),0,1);place(buf,mul(sine(60,d),t=>.15),0,1);for(let k=0;k<10;k++)place(buf,ed(noise(.01),300),U(0,d),.5);return buf};
+G.fl_awake=()=>{const d=2,buf=Z(d+.8);place(buf,hSub(90,26,1.6,1.6,4),0,1.2);place(buf,mul(chip(.8,4000),t=>.25*Math.exp(-t*3)),0,1);place(buf,sat(flLaugh(5,180,90,.22,.18),2.6),.25,.6);place(buf,mul(sweepEnv(3200,1800,1.2),t=>.04*Math.exp(-t*2)),.1,1);return hPhone(verb(buf,1.8,.4,2200))};
+G.fl_flame=()=>{const d=1.5,buf=Z(d+.5);place(buf,mul(movBP(noise(d),500,1800,.35),t=>.7*Math.min(1,t/.08)*Math.min(1,(d-t)/.3)),0,1);place(buf,utCrk(d,40,800,5000),0,.6);place(buf,mul(lp(noise(d),200),t=>.5*Math.min(1,(d-t)/.3)),0,1);return verb(buf,.8,.3,3000)};
+G.fl_bomb=()=>{const buf=Z(1);place(buf,mul(lp(pkSq(t=>1100-700*t/.3,.3,.5),2400),t=>.1),0,1);place(buf,mul(hp(noise(.6),3000),t=>.08*(.6+.4*Math.sin(PI2*20*t))),.3,1);return buf};
+G.fl_boom=()=>{const buf=Z(1.2);place(buf,hPunch(0),0,1);place(buf,hCrack(.3,300,7000,9),0,.8);place(buf,mul(chip(.2,2500),t=>.3*Math.exp(-t*12)),0,1);return verb(buf,.9,.3,3000)};
+G.fl_save=()=>{const buf=Z(1.4);[523.3,659.3,784,1046.5].forEach((f,i)=>place(buf,mul(add(sine(f,.6),pkSq(f,.6,.5),.08),t=>.18*Math.exp(-t*4)*Math.min(1,t/.004)),i*.09,1));return verb(buf,1.1,.4,5000)};
+G.fl_load=()=>{const buf=Z(1.4);place(buf,mul(sweepEnv(1600,120,.7,.6),t=>.15*Math.min(1,t/.02)),0,1);place(buf,mul(bp(noise(.7),600,4000),t=>.2*(.5+.5*Math.sin(PI2*30*t))),0,1);[1046.5,784,659.3,523.3].forEach((f,i)=>place(buf,mul(sine(f,.4),t=>.12*Math.exp(-t*6)),.6+i*.07,1));return verb(buf,1,.35,4000)};
+G.fl_trap=()=>{const buf=Z(.5);[0,.09].forEach(at=>place(buf,ed(bp(noise(.03),400,3000),110),at,.9));place(buf,mul(lp(noise(.15),700),t=>.3*Math.exp(-t*18)),.1,1);return verb(buf,.3,.2,2500)};
+// --- 파피루스 ---
+G.pp_bone=()=>{const buf=Z(.35);let ph=0;place(buf,mul(lp(T(.12,t=>{ph+=(1100-4200*t)/SR;return(ph%1)<.5?1:-1}),3500),t=>.25*Math.exp(-t*16)),0,1);place(buf,ed(bp(noise(.03),1200,3200),130),0,.6);return buf};
+G.pp_slide=()=>{const buf=Z(1);place(buf,hWhoosh(.5,500,2600),0,.8);for(let k=0;k<9;k++)place(buf,ed(bp(noise(.02),1500,4000),220),k*.05,.4);return verb(buf,.5,.25,3500)};
+G.pp_nyeh=()=>{const buf=Z(1.4);const F=[[400,650,1],[1500,2100,.7],[2500,3000,.25]];place(buf,utSyl(.16,250,230,[[250,400,1],[1400,1900,.5]],0),0,.9);[.18,.36,.54].forEach((at,i)=>place(buf,utSyl(.14,240-i*12,220-i*12,F,.05),at,1-i*.1));return verb(sat(buf,1.5),.6,.25,3500)};
+G.pp_blue=()=>{const buf=Z(1);place(buf,bell(1046.5,.8,4),0,.3);place(buf,utSq(523.3,.1,.5,.12,2500),0,1);return verb(buf,.7,.3,5000)};
+G.pp_jump=()=>{const buf=Z(.3);place(buf,mul(lp(pkSq(t=>300+900*t/.12,.12,.5),3500),t=>.15*Math.exp(-t*10)),0,1);return buf};
+G.pp_puzzle=()=>{const buf=Z(.5);for(let k=0;k<5;k++)place(buf,utSq([523.3,622.3,698.5,784,932.3][Math.floor(U(0,5))],.045,.25,.15,4000),k*.06,1);return buf};
+G.pp_lock=()=>{const buf=Z(1);[392,523.3,659.3].forEach((f,i)=>place(buf,utSq(f,.09,.25,.2,3500),i*.08,1));place(buf,ed(bp(noise(.04),300,2500),80),.26,.6);return verb(buf,.6,.3,4000)};
+G.pp_zap=()=>{const d=.3,buf=Z(d+.3);place(buf,mul(bp(noise(d),1500,8000),t=>.6*Math.exp(-t*8)*(.3+.7*Math.abs(Math.sin(PI2*60*t)))),0,1);place(buf,utSq(120,.15,.5,.12,1500),0,1);return verb(buf,.3,.2,4000)};
+G.pp_giant=()=>{const buf=Z(1.6);place(buf,sat(hWhoosh(.4,200,3000),1.6),0,1);place(buf,hPunch(1),.38,1);for(let k=0;k<8;k++)place(buf,ed(bp(noise(.03),1200,3500),150),.38+U(0,.25),.4);return verb(buf,1.2,.3,3000)};
+G.pp_spag=()=>{const buf=Z(1.2);place(buf,mul(movBP(noise(.45),600,2400,.25),t=>.4*Math.sin(Math.PI*t/.45)),0,1);place(buf,bell(1318.5,.6,4),.5,.2);place(buf,bell(1568,.6,4),.6,.2);return verb(buf,.8,.3,4000)};
+G.pp_fail=()=>{const buf=Z(1);[392,329.6,261.6].forEach((f,i)=>place(buf,utSq(f,.12,.5,.2,2400),i*.12,1));place(buf,mul(bp(noise(.3),1500,7000),t=>.3*Math.exp(-t*9)),.36,1);return verb(buf,.6,.25,3000)};
+['as_erupt','as_break','mt_boom','mt_zap','mt_heart','ud_throw','fl_boom','pp_giant'].forEach(n=>{const f=G[n];G[n]=()=>hPhone(f())});
+Object.assign(PK,{as_text:.4,as_menu:.5,as_hit:.8,as_orb:.6,mt_tick:.4,mt_beep:.5,mt_rate:.5,mt_drop:.6,mt_right:.7,ud_fly:.5,ud_block:.6,ud_hit:.7,ud_ding:.55,ud_spear:.7,fl_pellet:.55,fl_soul:.65,fl_trap:.6,fl_hee:.7,pp_bone:.6,pp_jump:.45,pp_puzzle:.45,pp_zap:.6,pp_nyeh:.8});
 window.GENSFX=Object.keys(G);
 // 만들기 순서 : 지금 싸우는 캐릭터 소리를 먼저 · 로딩을 건너뛰어도 게임하면서 끝까지 계속 만듦
 const GL=Object.keys(G),GI={};GL.forEach((n,i)=>GI[n]=i+1);let GQ=GL.slice(),GDONE=0;

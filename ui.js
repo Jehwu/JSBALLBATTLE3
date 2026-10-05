@@ -43,7 +43,7 @@ document.querySelectorAll('#grid .tile').forEach(t=>{t.dataset.fv='';paintIc(t.q
 // ===== ui.js : 화면 애니메이션 + 사운드 만들기 우선순위 =====
 
 // ---------- 지금 싸우는 캐릭터 소리를 먼저 만들기 ----------
-const SPFX={psy:['ps_'],kgm:['kgm_'],kaidan:['gk_'],diet:['dt_'],otaku:['ot_'],joker:['jk_'],pkc:['pk_'],kong:['kg_'],cjh:['cj_'],aura:['au_'],horror:['h_'],soccer:['kick','juggle','tackle','whistle','goal'],poop:['tv_'],master:['wm_'],radiant:['rd_'],thief:['th_'],bl:['bl_'],krl:['kr_'],chal:['ch_'],ge:['ge_'],ger:['ge_'],wk:['wk_'],pica:['pc_'],wick:['jw_'],oni:['oni_'],rage:['rg_','oni_'],ttd:['tt_'],kmj:['kj_'],sans:['sn_'],hsol:['hs_'],ezr:['ez_'],jett:['jt_'],terr:['tr_'],gaor:['gl_','mg_'],gapr:['gp_','mg_']};
+const SPFX={asg:['as_'],mtt:['mt_'],und:['ud_'],flw:['fl_'],pap:['pp_'],psy:['ps_'],kgm:['kgm_'],kaidan:['gk_'],diet:['dt_'],otaku:['ot_'],joker:['jk_'],pkc:['pk_'],kong:['kg_'],cjh:['cj_'],aura:['au_'],horror:['h_'],soccer:['kick','juggle','tackle','whistle','goal'],poop:['tv_'],master:['wm_'],radiant:['rd_'],thief:['th_'],bl:['bl_'],krl:['kr_'],chal:['ch_'],ge:['ge_'],ger:['ge_'],wk:['wk_'],pica:['pc_'],wick:['jw_'],oni:['oni_'],rage:['rg_','oni_'],ttd:['tt_'],kmj:['kj_'],sans:['sn_'],hsol:['hs_'],ezr:['ez_'],jett:['jt_'],terr:['tr_'],gaor:['gl_','mg_'],gapr:['gp_','mg_']};
 function sndPri(ks){if(!window.GENPRI||!window.GENSFX)return;const P=[];ks.forEach(k=>(SPFX[k]||[]).forEach(p=>P.push(p)));if(!P.length)return;GENPRI(GENSFX.filter(n=>P.some(p=>n==p||n.startsWith(p))))}
 const _initUI=init;init=function(){const r=_initUI.apply(this,arguments);try{if(F)sndPri(F.map(f=>f.d.k))}catch(e){}return r};
 
@@ -273,4 +273,34 @@ ultTitle=function(){const D=bn.d,t=bn.t,txt=bn.txt,cy=A*.5,W=A-24,H=134,x0=12;
   const bu=clamp((t-.22)/.4,0,1),bxx=tx+bu*mw*.5+(t>.62?0:0);if(t<1.2){g.fillStyle=t>.62&&Math.floor(t*20)%2?'#ff0':'#fff';g.fillRect(bxx-4,my-mh/2-2,8,mh+4);g.fillStyle='#000';g.fillRect(bxx-1,my-mh/2,2,mh)}g.restore();
   g.restore()};
 banner=function(){if(typeof CIN!='undefined'&&CIN&&CIN.draw)CIN.draw();if(!bn)return;if(bn.ult){ultTitle();return}utSkill()};
-;
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ▶ 섹션 : 패치노트
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ===== 패치노트 · 버전 =====
+// 메뉴 오른쪽 위 작은 버튼 → 지금까지의 대형 업데이트 목록 (새 버전이 나오면 빨간 점)
+// 업데이트할 때 VER 를 올리고 PATCH 맨 위에 한 칸 추가
+// ======================================================================
+const VER='5.0.0';
+const PATCH=[
+  {v:'5.0',t:'UNDERTALE',s:'언더테일 5인방 상륙',c:[42,43,44,45,46],f:['변신하는 캐릭터 3명 : 메타톤 (상자 → NEO) · 언다인 (쓰러지면 THE UNDYING) · 플라위 (영혼 6개 → 오메가)','언더테일 도트 그림이 공 뒤에 함께 등장 · VS 화면 · 궁극기 배너에도 도트 초상화','파랑 · 주황 공격 (파랑은 움직이면, 주황은 멈춰 있으면 아픔)','메뉴 오른쪽 위 패치노트 · 버전 표시'],x:['그림 자리에 gif · mp4 를 넣으면 움직이는 그림으로 나옴']},
+  {v:'4.5',t:'C.H.A.O.S',s:'혼돈의 모드 · 도전 모드 2.0',c:[40,41],f:['C.H.A.O.S 모드 : 봇으로 시작 · 랜덤 스킬 3개 · 라운드마다 스킬 증강 · 5라운드','도전 모드 2.0 : 갈림길 지도 · 상점 · 이벤트 · 유물'],x:['카오스에서 내 캐릭터 표시 · 다시 시작 버그 수정','캐릭터 공방 모드 정리']},
+  {v:'4.0',t:'언더테일 스타일',s:'스킬 배너 · VS · 설정',c:[36,37,38,39],f:['스킬 · 궁극기 배너가 언더테일 대사 상자로','새 VS 연출 (심장 → 전투 상자 → VS 베기)','설정 : 캐릭터별 효과음 켜고 끄기'],x:['사전 스킬 설명 잘림 수정','아이콘을 네온 스타일로 통일']},
+  {v:'3.5',t:'도전',s:'혼자 끝까지 올라가는 도전 모드',c:[34,35],f:['도전 모드 · 경기장 기믹 모드','언더테일 느낌의 메뉴 화면','효과음을 게임이 직접 만듦 (mp3 없이)'],x:['캐릭터 사전 정리 (기본 캐릭터별로 묶기)','아이콘 다듬기 · 기본 박지성 블래스터 그림 교체']},
+  {v:'3.0',t:'만화 컷',s:'궁극기가 만화 한 페이지로',c:[30,31,32,33],f:['만화 컷 연출 (images 폴더에 컷 사진 넣기)']},
+  {v:'2.5',t:'해골과 소환',s:'소환물 · 블래스터 · 독',c:[23,24,25,26,27,28,29],f:['images 폴더에 사진을 넣으면 게임에 나옴 (스탠드 · 소환물 · 블래스터)'],x:['구석에 갇히는 버그 · 모서리 연속 튕김 수정']},
+  {v:'2.0',t:'스탠드와 괴물',s:'새 기본 캐릭터 김지우',c:[17,18,19,20,21,22],f:['새 기본 캐릭터 김지우 (저택 괴물 술래잡기)','스탠드가 항상 뒤에 떠 있는 캐릭터'],x:['기존 스킬 퀄리티 업그레이드 (권루티비 · 트릭 카드 · 풀오토 사격 · 중거리 슛)']},
+  {v:'1.5',t:'변이',s:'같은 친구 · 다른 모습',c:[7,8,9,10,11,12,13,14,15,16],f:['변이 캐릭터 시스템 (기본 캐릭터 + 변이)','전체 연출 업그레이드']},
+  {v:'1.0',t:'개막',s:'JS BALL BATTLE3 시작',c:[0,1,2,3,4,5,6],f:['1대1 · 3인 난투 · 토너먼트 (JS CHAMPIONS)','캐릭터 선택 · 카운트다운 연출']}];
+function pnSeen(){try{return localStorage.getItem('jsbb3_ver')}catch(e){return null}}
+function pnMark(){try{localStorage.setItem('jsbb3_ver',VER)}catch(e){}const d=document.querySelector('#pnbtn i');if(d)d.style.display='none'}
+(function(){const H=$('#hub');if(!H)return;const b=document.createElement('button');b.id='pnbtn';b.innerHTML='<b>패치노트</b><small>v'+VER.replace(/\.0$/,'')+'</small><i'+(pnSeen()==VER?' style="display:none"':'')+'></i>';H.appendChild(b);
+  const o=document.createElement('div');o.id='pnote';o.innerHTML='<div class="pnbox"><div class="pnhd"><div><b>* PATCH NOTES</b><small>JS BALL BATTLE3 · 현재 버전 v'+VER+'</small></div><button class="pnx">✕</button></div><div class="pnlist"></div></div>';document.body.appendChild(o);
+  const L=o.querySelector('.pnlist');L.innerHTML=PATCH.map((p,i)=>`<div class="pnc${i==0?' open':''}" data-i="${i}"><div class="pnt"><em>v${p.v}</em><b>${p.t}</b>${i==0?'<span>NEW</span>':''}<u>${i==0?'−':'+'}</u></div><small class="pns">${p.s}</small>
+    <div class="pnd">${p.c&&p.c.length?'<h4>신규 캐릭터</h4><div class="pnch">'+p.c.filter(k=>DEF[k]).map(k=>`<span><canvas data-k="${k}"></canvas>${DEF[k].name}</span>`).join('')+'</div>':''}${p.f&&p.f.length?'<h4>새로운 것</h4><ul>'+p.f.map(x=>'<li>'+x+'</li>').join('')+'</ul>':''}${p.x&&p.x.length?'<h4>개선</h4><ul class="pnx2">'+p.x.map(x=>'<li>'+x+'</li>').join('')+'</ul>':''}</div></div>`).join('');
+  const paint=c=>{c.querySelectorAll('canvas[data-k]').forEach(cv=>{if(cv.dataset.p)return;cv.dataset.p=1;try{paintIc(cv,DEF[+cv.dataset.k],18)}catch(e){}})};
+  L.querySelectorAll('.pnc').forEach(c=>c.querySelector('.pnt').addEventListener('click',()=>{const on=!c.classList.contains('open');c.classList.toggle('open',on);c.querySelector('u').textContent=on?'−':'+';if(on)paint(c);try{SFX('click')}catch(e){}}));
+  const close=()=>{o.classList.remove('on');try{SFX('click')}catch(e){}};o.querySelector('.pnx').addEventListener('click',close);o.addEventListener('click',e=>{if(e.target==o)close()});
+  b.addEventListener('click',e=>{e.stopPropagation();try{audioOn();SFX('click')}catch(x){}paint(L.querySelector('.pnc.open')||L);o.classList.add('on');L.scrollTop=0;pnMark()})})();
+// ---------- 언더테일 5인방 : VS · 궁극기 배너의 도트 초상화를 실제 그림으로 ----------
+const UTPORT={asg:()=>'ut_asgore',mtt:D=>D.mtNeo?'ut_mtt_neo':'ut_mtt_box',und:D=>D.udX?'ut_undyne_x':'ut_undyne',flw:D=>D.flX?'ut_flowey_x':'ut_flowey',pap:()=>'ut_papyrus'};
+const _utSpriteUT=utSprite;utSprite=function(D,cx,cy,S,n){const m=UTPORT[D&&D.k],nm=m&&m(D),o=nm&&typeof UTI!='undefined'&&UTI[nm];if(o&&typeof utDraw=='function'){const sc=Math.min(S/o.w,S/o.h),h=o.h*sc;if(utDraw(nm,cx,cy,h,1,0,1))return}return _utSpriteUT.apply(this,arguments)};
