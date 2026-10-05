@@ -1974,17 +1974,25 @@ EMB.gst=(f,D)=>{g.rotate(-f.rot);neon({col:'#ffffff',hi:'#ffffff'},1.3,()=>{g.be
 Object.assign(DMGK,{gst:1.6});
 
 // ======================================================================
-// 궁극기 봉인 시스템
-// 누군가 궁극기를 쓰면 그 궁극기가 끝날 때까지 (최소 1초 · 최대 3초) 다른 캐릭터는 스킬을 못 씀
-// (쓰려던 스킬은 취소 · 쿨타임은 그동안에도 계속 돌아감) · 1대1 · 3인전에서만 (10인 난투는 제외)
+// 궁극기 봉인 시스템 (궁극기를 깔끔하게 보기)
+// 누군가 궁극기를 쓰면 그 궁극기가 끝날 때까지 (최대 6초) 궁극기만 움직임
+//   · 모두 (궁을 쓴 본인도) 다른 스킬을 못 씀 · 쓰려던 스킬은 취소
+//   · 그 전에 깔아둔 장판 · 소환물 · 탄환 · 쿨타임 · 궁 게이지는 전부 멈춰 있다가 궁이 끝나면 그대로 이어짐
+//   → 화면엔 궁극기만 보이고, 궁이 끝나면 궁 쓰기 직전 상태로 이어서 싸우니까 밸런스도 그대로
 // ======================================================================
 let ULK=null;
-function ulkWrap(s){if(!s||!s.ult||s.ulkW)return;s.ulkW=1;const f0=s.f;s.f=function(o,t){const n0=HZ.length,r=f0.apply(this,arguments);
-  if(F&&F.length<4&&phase=='play'&&o&&!o.dead&&!window.NOULK){ULK={o,t:0,H:HZ.slice(n0)};F.forEach(x=>{if(x!=o&&!x.dead){x.cast=null;if(!SKIP)ft(x.x,x.y-x.r-30,'봉인','#9aa0b4',15)}})}return r}}
+function ulkWrap(s){if(!s||!s.ult||s.ulkW)return;s.ulkW=1;const f0=s.f;s.f=function(o,t){const pre=new Set(HZ),preB=new Set(B),r=f0.apply(this,arguments);
+  if(F&&phase=='play'&&o&&!o.dead&&!window.NOULK){ULK={o,t:0,H:HZ.filter(h=>!pre.has(h)),pre,preB};F.forEach(x=>{if(x!=o&&!x.dead){x.cast=null;if(!SKIP)ft(x.x,x.y-x.r-30,'봉인','#9aa0b4',15)}})}return r}}
 DEF.forEach(d=>d.sk.forEach(ulkWrap));[MTSK2,UDSK2,FLSK2].forEach(L=>L.forEach(ulkWrap));if(typeof GERSK!='undefined')GERSK.forEach(ulkWrap);
-const _updULK=update;update=function(dt){if(ULK){ULK.t+=dt;const alive=ULK.H.some(h=>HZ.includes(h))||CIN||TSTOP||MAD;if(!F||ULK.o.dead||phase!='play'||ULK.t>(window.ULKMAX||3)||(ULK.t>(window.ULKMIN||1)&&!alive))ULK=null}
-  if(ULK&&F)F.forEach(f=>{if(f==ULK.o||f.dead)return;if(f.cast)f.cast=null;f.gcd=Math.max(f.gcd||0,.12)});
-  _updULK(dt);if(F&&F.length<4)F.forEach(f=>{const P=$('#p'+f.i);if(P)P.classList.toggle('ulk',!!(ULK&&f!=ULK.o&&!f.dead))})};
+const _updULK=update;update=function(dt){if(ULK){ULK.t+=dt;const alive=ULK.H.some(h=>HZ.includes(h))||CIN||TSTOP||MAD;if(!F||ULK.o.dead||phase!='play'||ULK.t>(window.ULKMAX||6)||(ULK.t>1&&!alive))ULK=null}
+  if(!ULK||!F){_updULK(dt);if(F)F.forEach(f=>{const P=$('#p'+f.i);if(P)P.classList.remove('ulk')});return}
+  const o=ULK.o,run=h=>!ULK.pre.has(h),snap=F.map(f=>[f.cds?f.cds.slice():null,f.ug||0]),hH=HZ.filter(h=>!run(h)),hB=B.filter(q=>ULK.preB.has(q));HZ=HZ.filter(run);B=B.filter(q=>!ULK.preB.has(q));
+  F.forEach(f=>{if(f.dead)return;if(f.cast&&!(f==o&&f.cast.s.ult))f.cast=null;f.gcd=Math.max(f.gcd||0,.12)});
+  try{_updULK(dt)}finally{HZ=HZ.concat(hH);B=B.concat(hB)}
+  if(!F)return;F.forEach((f,i)=>{const s0=snap[i];if(s0[0]&&f.cds&&f.cds.length==s0[0].length)f.cds=f.cds.map((c,j)=>Math.max(c,s0[0][j]));if(s0[1]<100&&f.ug>s0[1])f.ug=Math.max(s0[1],f.ug-dt*2.2);const P=$('#p'+f.i);if(P)P.classList.toggle('ulk',!!ULK&&f!=o&&!f.dead)})};
+// 봉인 때문에 궁이 끝까지 다 들어가게 되면서 바뀐 밸런스를 캐릭터별 피해 배율로 다시 맞춤 (전체 캐릭터 시뮬레이션 기준)
+const ULKADJ={"ttd":0.85,"pica":0.863,"bl":0.876,"horror":0.885,"krl":0.894,"thief":0.899,"poop":0.907,"hsol":0.907,"radiant":0.925,"ezr":0.925,"ge":0.929,"master":0.938,"kong":0.938,"gold":0.956,"cjh":0.956,"diet":0.96,"wk":0.969,"chal":0.982,"gst":0.982,"aura":1.018,"magma":1.022,"kmj":1.026,"kaidan":1.026,"asg":1.031,"mtt":1.031,"heavy":1.044,"kgm":1.044,"und":1.049,"jett":1.053,"gun":1.062,"gaor":1.062,"monkey":1.066,"otaku":1.066,"ink":1.071,"flw":1.071,"rose":1.075,"wick":1.084,"terr":1.084,"sans":1.088,"pkc":1.088,"gapr":1.093,"oni":1.097,"rage":1.097};
+Object.keys(ULKADJ).forEach(k=>{DMGK[k]=Math.round((DMGK[k]||1)*ULKADJ[k]*1000)/1000});
 const _initULK=init;init=function(){ULK=null;return _initULK.apply(this,arguments)};
 const _lowULK=lowHP;lowHP=function(f){_lowULK(f);if(!ULK||f==ULK.o||f.dead||f.hid||phase!='play')return;const x=f.x+f.r*.9,y=f.y-f.r-10;g.save();g.globalAlpha=.9;g.fillStyle='#9aa0b4';g.strokeStyle='#000';g.lineWidth=2;g.beginPath();g.rect(x-6,y-3,12,9);g.fill();g.stroke();g.beginPath();g.arc(x,y-3,4,Math.PI,TAU);g.lineWidth=4;g.stroke();g.strokeStyle='#9aa0b4';g.lineWidth=2;g.stroke();g.restore()};
 
