@@ -1220,17 +1220,19 @@ Object.keys(ICC).forEach(k=>delete ICC[k]);mkDict();
 // ---------- 그림 불러오기 (gif → mp4 → png · webp · jpg) ----------
 const UTI={},UTN=['ut_asgore','ut_asgore_atk','ut_mtt_box','ut_mtt_neo','ut_undyne','ut_undyne_x','ut_flowey','ut_flowey_x','ut_flowey_tv','ut_papyrus'];
 function utKey(c){const x=c.getContext('2d'),D=x.getImageData(0,0,c.width,c.height),p=D.data;for(let i=0;i<p.length;i+=4){const m=Math.max(p[i],p[i+1],p[i+2]);if(m<34)p[i+3]=0;else if(m<60)p[i+3]=Math.min(p[i+3],(m-34)*10)}x.putImageData(D,0,0);return c}
-function utLoad(n){if(n in UTI)return;UTI[n]=null;const done=o=>{UTI[n]=o};
+function utLoad(n,probe){if(!probe){if(n in UTI)return;UTI[n]=null}const done=o=>{UTI[n]=o},fb=()=>{if(!probe)img(0)};
   const img=i=>{const L=['images/'+n+'.png','images/'+n+'.webp','images/'+n+'.jpg',n+'.png','../images/'+n+'.png'];if(i>=L.length)return;const im=new Image();im.onload=()=>done({im,w:im.width,h:im.height});im.onerror=()=>img(i+1);im.src=L[i]};
-  const vid=()=>{fetch('images/'+n+'.mp4',{method:'HEAD'}).then(r=>{if(!r.ok)throw 0;vid2()}).catch(()=>img(0))};
-  const vid2=()=>{try{const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.onloadeddata=()=>{done({vid:v,w:v.videoWidth,h:v.videoHeight});try{v.play().catch(()=>{})}catch(e){}};v.onerror=()=>img(0);v.src='images/'+n+'.mp4'}catch(e){img(0)}};
-  const gif=()=>{if(typeof fetch!='function'||location.protocol=='file:'){img(0);return}fetch('images/'+n+'.gif').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(async buf=>{
+  const vid=()=>{fetch('images/'+n+'.mp4',{method:'HEAD'}).then(r=>{if(!r.ok)throw 0;vid2()}).catch(fb)};
+  const vid2=()=>{try{const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.onloadeddata=()=>{done({vid:v,w:v.videoWidth,h:v.videoHeight});try{v.play().catch(()=>{})}catch(e){}};v.onerror=fb;v.src='images/'+n+'.mp4'}catch(e){fb()}};
+  const gif=()=>{if(typeof fetch!='function'||location.protocol=='file:'){fb();return}fetch('images/'+n+'.gif').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(async buf=>{
     if(typeof ImageDecoder=='undefined'){const im=new Image();im.onload=()=>done({im,w:im.width,h:im.height});im.src=URL.createObjectURL(new Blob([buf],{type:'image/gif'}));return}
     const dec=new ImageDecoder({data:buf,type:'image/gif'});await dec.tracks.ready;const N=dec.tracks.selectedTrack.frameCount,fr=[];let tot=0;
     for(let i=0;i<N;i++){const r=await dec.decode({frameIndex:i}),vf=r.image,c=document.createElement('canvas');c.width=vf.displayWidth;c.height=vf.displayHeight;c.getContext('2d').drawImage(vf,0,0);const d=Math.max(.02,(vf.duration||100000)/1e6);vf.close();fr.push({c:utKey(c),d});tot+=d}
     done({fr,tot,w:fr[0].c.width,h:fr[0].c.height})}).catch(()=>vid())};
-  gif()}
-UTN.forEach(utLoad);
+  if(probe)gif();else img(0)}
+UTN.forEach(n=>utLoad(n));
+// gif · mp4 는 게임이 다 켜진 뒤에 하나씩 천천히 찾아봄
+setTimeout(()=>{let i=0;const nx=()=>{if(i>=UTN.length)return;const n=UTN[i++],o=UTI[n];utLoad(n,1);setTimeout(nx,700)};nx()},6000);
 function utSrc(n){const o=UTI[n];if(!o)return null;if(o.fr){let t=(clock||0)%o.tot;for(const f of o.fr){if(t<f.d)return f.c;t-=f.d}return o.fr[0].c}if(o.vid){if(o.vid.paused)try{o.vid.play().catch(()=>{})}catch(e){}return o.vid}return o.im}
 // (x,y) = 그림 아래 가운데 (cen 이면 가운데) · h = 높이
 function utDraw(n,x,y,h,al,flip,cen,comp){const o=UTI[n],s=utSrc(n);if(!s||!o||!(al>0))return false;const w=h*o.w/o.h;g.save();g.globalAlpha=Math.min(1,al);g.imageSmoothingEnabled=false;
@@ -1261,7 +1263,8 @@ function utFire(x,y,s,al,a){if(!(al>0))return;g.save();g.translate(x,y);g.rotate
 // 언더테일 버튼
 function utBtn(x,y,w,h,lab,al,on,ic){if(!(al>0))return;g.save();g.globalAlpha=Math.min(1,al);g.fillStyle='#000';g.fillRect(x-w/2,y-h/2,w,h);g.strokeStyle=on?UTYL:UTO;g.lineWidth=3;g.strokeRect(x-w/2,y-h/2,w,h);
   g.font='13px '+UTP8;g.textAlign='center';g.textBaseline='middle';g.fillStyle=on?UTYL:UTO;g.fillText(lab,x+8,y+1);if(on&&typeof utHeart=='function')utHeart(x-w/2+14,y,1.6,'#ff0000');else{g.fillStyle=UTO;g.fillRect(x-w/2+9,y-5,8,10)}g.restore()}
-function utPush(n){if(!SND.includes(n))SND.push(n);if(!AUD[n])AUD[n]=new SoundPool('sounds/'+n+'.mp3',3)}
+// 효과음은 sound.js 가 직접 만들어서 넣음 → mp3 를 찾으러 가지 않음 (폰에서 요청이 너무 많아지면 다른 파일을 못 불러옴)
+function utPush(n){if(!SND.includes(n))SND.push(n)}
 
 // ======================================================================
 // 박지성 • 아스고어 (괴물들의 왕 · 붉은 삼지창)
