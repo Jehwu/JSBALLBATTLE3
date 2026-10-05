@@ -2021,10 +2021,10 @@ const _openInfoTR=openInfo;openInfo=function(i){_openInfoTR(i);const d=DEF[i],X=
 // ===== extra29.js : 유튜버 6인방 (v5.3) =====
 // 김민채 • 도티 · 공병은 • 미스터 비스트 · 박지성 • 겜브링 · 김티비 • 침착맨 · 김가은 • 감스트 · 김지우 • 우주하마
 // 사진 : images 폴더의 yt_*.png (배경 지운 사진) → 평소엔 안 보이고, 스킬을 쓸 때 공 뒤에서 튀어나옴 · 궁극기는 썸네일 컷인
-// 목소리 : clips.js 의 ytv 섹션 (보내준 영상에서 잘라낸 우주하마 "우! 주! 하! 마!" · 최고민수 영상 대사)
+// 목소리 : clips.js 의 ytv 섹션 (보내준 영상에서 잘라냄 : 개웃겨서 도티낳음 · 감스트 "이게 뭐야" · 우주하마 "우! 주! 하! 마!" · 최고민수 영상 대사)
 // ======================================================================
 const YTF='"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif',YTR='#ff0033',YTDL=1.1;
-['yt_ddotty','yt_ddotty_mc','yt_beast','yt_gamb','yt_chim','yt_gamst','yt_gamst2','yt_uzu'].forEach(n=>utLoad(n));
+['yt_ddotty','yt_ddotty_mc','yt_beast','yt_gamb','yt_chim','yt_gamst','yt_gamst2','yt_gamst3','yt_uzu'].forEach(n=>utLoad(n));
 const YTPX={yt_ddotty_mc:1};
 // (x,y) = 그림 아래 가운데 (cen 이면 가운데) · 사진은 부드럽게, 도트 그림은 또렷하게
 function ytDraw(n,x,y,h,al,flip,cen,rot){const o=UTI[n],s=utSrc(n);if(!o||!s||!(al>0)||!(h>0))return false;const w=h*o.w/o.h;g.save();g.globalAlpha=Math.min(1,al);g.imageSmoothingEnabled=!YTPX[n];g.translate(x,y);if(rot)g.rotate(rot);if(flip)g.scale(-1,1);g.drawImage(s,-w/2,cen?-h/2:-h,w,h);g.restore();return true}
@@ -2053,7 +2053,7 @@ const YTSND=[];function ytS(list,lab){list.forEach((n,i)=>{utPush(n);SLB[n]=lab[
 // 패시브 리스폰 : 체력이 25 이하가 되면 딱 한 번 "아아악!" → 블록으로 부서졌다가 다른 곳에서 다시 태어남 (체력 +15 · 1.2초 무적)
 // 1) 막장 탈출맵 : 상대 둘레에 블록이 하나씩 쌓여 가둠 → 가운데 TNT 가 치익… → 펑
 // 2) 누구보다 빠르게 남들과는 다르게 : 상대를 꿰뚫으며 지그재그로 네 번 질주 (도트 잔상)
-// 3) ULT 스카이블럭 대붕괴 : 거대한 마크 도티 등장 → 하늘에서 블록이 세 번 쏟아짐 → 상대를 둘러싼 TNT 연쇄 폭발
+// 3) ULT 개웃겨서 도티낳음 : "ㅋㅋㅋㅋ" → "호잇짜!" 아기 도티가 여섯 번 태어나 "왜 나를 낳아?" 하며 들이받음 → "!짜잇호" 거대한 도티가 빨아들였다가 쾅
 // ======================================================================
 const DOG='#5bd16b',DOTX={};
 function doTex(ty){if(DOTX[ty])return DOTX[ty];const c=document.createElement('canvas');c.width=c.height=8;const x=c.getContext('2d');let sd=ty.length*977+13;const R=()=>{sd=(sd*9301+49297)%233280;return sd/233280};
@@ -2071,16 +2071,16 @@ function doBlock(x,y,s,ty,al,rot,wh){if(!(al>0)||!(s>0))return;g.save();g.global
   if(ty=='tnt'&&s>=18){g.fillStyle='#111';g.font='900 '+Math.round(s*.3)+'px '+YTF;g.textAlign='center';g.textBaseline='middle';g.fillText('TNT',0,0)}
   if(wh>0){g.globalAlpha=Math.min(1,al)*wh;g.fillStyle='#fff';g.fillRect(-s/2,-s/2,s,s)}g.restore()}
 function doBoom(x,y,R){if(SKIP)return;ytCube(x,y,['#ffffff','#ffd23a','#ff7a1a','#555555'],18,320);ring(x,y,10,R,'#ffffff',6,.35);ring(x,y,10,R*.75,'#ffb21a',10,.45);FX.push({k:'lkimp',x,y,R:R*.9,col:'#ffd23a',a:rnd(0,TAU),sd:Math.floor(rnd(0,999)),l:.18,m:.18})}
-ytS(['do_block','do_break','do_fuse','do_boom','do_dash','do_resp','do_ult','do_fall'],['도티 · 블록 놓기','도티 · 블록 부서짐','도티 · TNT 치익','도티 · TNT 폭발','도티 · 누구보다 빠르게','도티 · 아아악! 리스폰','도티 · 초통령 등장','도티 · 블록 떨어짐']);
+ytS(['do_block','do_break','do_fuse','do_boom','do_dash','do_resp','do_ult','do_pop'],['도티 · 블록 놓기','도티 · 블록 부서짐','도티 · TNT 치익','도티 · TNT 폭발','도티 · 누구보다 빠르게','도티 · 아아악! 리스폰','도티 · !짜잇호','도티 · 호잇짜!']);
 const DOSK=[
   {n:'막장 탈출맵',w:.3,cd:9,c:(o,t)=>!t.hid&&dist(o,t)<560,f:(o,t)=>doCage(o,t)},
   {n:'누구보다 빠르게',w:.25,cd:7.5,c:(o,t)=>!t.hid&&dist(o,t)<430,f:(o,t)=>doDash(o,t)},
-  {n:'스카이블럭 대붕괴',w:.4,ult:1,c:(o,t)=>!t.hid,f:(o,t)=>doUlt(o,t)}];
+  {n:'개웃겨서 도티낳음',w:.4,ult:1,c:(o,t)=>!t.hid,f:(o,t)=>doUlt(o,t)}];
 const DOI=DEF.findIndex(d=>d.name=='김민채');
 DEF.push({name:'김민채 • 도티',gl:'블',k:'dto',vof:DOI,r:26,sp:214,col:DOG,hi:'#ffffff',dk:'#2b1a0c',alt:{col:'#c8281e',hi:'#ffe0dc',dk:'#2a0604'},alt2:{col:'#4fe8de',hi:'#e0fffb',dk:'#062a28'},sk:DOSK});
 INFO['김민채 • 도티']={st:[8,8,9,8,8,10],p:'리스폰 · 체력이 25 이하가 되면 딱 한 번 "아아악!" 하고 블록으로 부서졌다가 다른 곳에서 다시 태어남 (체력 +15 · 1.2초 동안 무적)',
-  sk:[['7 (TNT)','상대 둘레에 블록이 하나씩 쌓여 가둠 → 가운데 놓인 TNT 가 치익… 하다가 펑'],['2.6×4','"누구보다 빠르게 남들과는 다르게!" 상대를 꿰뚫으며 지그재그로 네 번 질주 · 도트 잔상'],['3.2×n+1.3×6','거대한 마크 도티 등장 → 하늘에서 블록이 세 번 쏟아짐 (그림자 조심) → 상대를 둘러싼 TNT 연쇄 폭발']]};
-YTPOP.dto=(f,s)=>s.ult?'yt_ddotty_mc':'yt_ddotty';
+  sk:[['7 (TNT)','상대 둘레에 블록이 하나씩 쌓여 가둠 → 가운데 놓인 TNT 가 치익… 하다가 펑'],['2.6×4','"누구보다 빠르게 남들과는 다르게!" 상대를 꿰뚫으며 지그재그로 네 번 질주 · 도트 잔상'],['1.6×6+6','"ㅋㅋㅋㅋ" → "호잇짜!" 아기 도티가 여섯 번 태어나서 "왜 나를 낳아?" 하며 들이받음 → "!짜잇호" 거대한 도티가 빨아들였다가 쾅']]};
+YTPOP.dto=(f,s)=>s.n=='누구보다 빠르게'?'yt_ddotty_mc':'yt_ddotty';
 // ---------- 패시브 : 리스폰 ----------
 const _hurtDO=hurt;hurt=function(t,n,o){if(t&&t.doInv>0&&o&&o!=t)return;const r=_hurtDO.apply(this,arguments);
   if(t&&t.d&&t.d.k=='dto'&&!t.doRs&&!t.dead&&t.hp>0&&t.hp<=25&&phase=='play'){t.doRs=1;doRespawn(t)}return r};
@@ -2108,25 +2108,32 @@ HZX.dods=(h,dt,EN)=>{const o=h.o,e=h.tg;if(o.dead)return false;const L=.21,leg=M
   const u=Math.min(1,(h.t-leg*L)/L),k=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;o.x=h.sx+(h.ex-h.sx)*k;o.y=h.sy+(h.ey-h.sy)*k;h.tr.push({x:o.x,y:o.y,t:h.t});if(h.tr.length>26)h.tr.shift();
   ytHitL(EN,h.hit,'l'+leg,o.x,o.y,o.r+6,2.6,o,0,x=>{if(!SKIP)ytCube(x.x,x.y,['#5bd16b','#ffffff'],5,200)});return true};
 HZD.dods=h=>{const o=h.o;h.tr.forEach((p,i)=>{const a=(i/h.tr.length)*.55*(1-Math.max(0,h.t-.84)/.25);if(a<=0)return;g.save();g.globalAlpha=a;g.fillStyle=i%2?DOG:'#2b1a0c';const s=o.r*1.5*(.5+.5*i/h.tr.length);g.fillRect(Math.round(p.x-s/2),Math.round(p.y-s/2),s,s);g.restore()})};
-// ---------- 3) ULT 스카이블럭 대붕괴 ----------
-function doUlt(o,t){if(!t||t.dead)t=tgt(o);if(!t)return;HZ.push({k:'doul',o,tg:t,t:0,W:[],T:[],hit:new Set(),wv:0})}
-HZX.doul=(h,dt,EN)=>{const o=h.o,u=h.t-YTDL;h.u=u;if(u<0)return true;const e=h.tg,live=ytLive(e);if(!h.lk){h.lk=1;SFXa('do_ult')}if(!o.dead){o.gcd=Math.max(o.gcd,.4);o.cast=null}
-  if(live&&u>1&&u<3.9)e.slow=Math.max(e.slow||0,.3);
-  [1.0,1.65,2.3].forEach((w,wi)=>{if(u>=w&&h.wv<=wi){h.wv=wi+1;const px=live?clamp(e.x+e.dx*e.sp*.45,40,A-40):A/2,py=live?clamp(e.y+e.dy*e.sp*.45,40,A-40):A/2,G=58,cx=Math.round(px/G)*G,cy=Math.round(py/G)*G;
-    const C=[[0,0],[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]].sort(()=>Math.random()-.5).slice(0,4);C.unshift([0,0]);const seen={};C.forEach(([a,b],j)=>{const k=a+','+b;if(seen[k])return;seen[k]=1;h.W.push({x:clamp(cx+a*G,30,A-30),y:clamp(cy+b*G,30,A-30),t0:u+j*.05,ty:DOTY[Math.floor(rnd(0,DOTY.length))],id:wi+'_'+j})});SFXa('do_fall')}});
-  h.W.forEach(b=>{if(!b.hit&&u>=b.t0+.5){b.hit=1;if(!SKIP)ytCube(b.x,b.y,DOCOL[b.ty],6,200);shake=Math.max(shake,7);ytHitL(EN,h.hit,b.id,b.x,b.y,32,3.2,o,0);if(!h.sb||u-h.sb>.15){h.sb=u;SFXa('do_break')}}});
-  if(u>=3&&!h.tn){h.tn=1;const cx=live?e.x:A/2,cy=live?e.y:A/2;for(let i=0;i<6;i++){const a=i*TAU/6+rnd(-.1,.1);h.T.push({x:clamp(cx+Math.cos(a)*72,26,A-26),y:clamp(cy+Math.sin(a)*72,26,A-26),t0:3.65+i*.11})}SFXa('do_block');setTimeout(()=>{try{SFXa('do_fuse')}catch(x){}},100)}
-  h.T.forEach((q,i)=>{if(!q.bm&&u>=q.t0){q.bm=1;SFXa('do_boom');shake=Math.max(shake,12);ytHitL(EN,h.hit,'t'+i,q.x,q.y,74,1.3,o,i==5);doBoom(q.x,q.y,90)}});
-  return u<4.55};
-HZD.doul=h=>{const u=h.u;if(!(u>=0))return;const fa=u<4.3?Math.min(1,u/.4):Math.max(0,1-(u-4.3)/.25);lkDim(.5*fa);
-  g.save();g.globalAlpha=.35*fa;g.strokeStyle='#5bd16b';g.lineWidth=1;const G=58;for(let x=0;x<=A;x+=G){g.beginPath();g.moveTo(x,0);g.lineTo(x,A);g.stroke()}for(let y=0;y<=A;y+=G){g.beginPath();g.moveTo(0,y);g.lineTo(A,y);g.stroke()}g.restore();
-  h.W.forEach(b=>{const a=u-b.t0;if(a<0||b.hit)return;const k=Math.min(1,a/.5);g.save();g.globalAlpha=.25+.4*k;g.fillStyle='#000';g.fillRect(b.x-27*(.5+.5*k),b.y-27*(.5+.5*k),54*(.5+.5*k),54*(.5+.5*k));g.restore()})};
+// ---------- 3) ULT 개웃겨서 도티낳음 ----------
+function doUlt(o,t){if(!t||t.dead)t=tgt(o);if(!t)return;HZ.push({k:'doul',o,tg:t,t:0,K:[],L:[],hit:new Set(),nb:0});SFXa('yt_dotti')}
+HZX.doul=(h,dt,EN)=>{const o=h.o,u=h.t-YTDL;h.u=u;if(u<0)return true;const e=h.tg,live=ytLive(e);if(!o.dead){o.gcd=Math.max(o.gcd,.4);o.cast=null}
+  if(!h.lk){h.lk=1;for(let i=0;i<9;i++)h.L.push({x:rnd(60,A-60),y:rnd(90,A-90),t0:.45+i*.08,s:rnd(22,38),r:rnd(-.3,.3)})}
+  if(live&&u>=1&&u<3.3)e.slow=Math.max(e.slow||0,.3);
+  // 호잇짜! 아기 도티 여섯
+  while(h.nb<6&&u>=1.2+h.nb*.3){const i=h.nb++,a=(live?rnd(0,TAU):0)+i*TAU/6,cx=live?e.x:A/2,cy=live?e.y:A/2;h.K.push({i,x:clamp(cx+Math.cos(a)*150,30,A-30),y:clamp(cy+Math.sin(a)*150,40,A-30),t0:u,why:i%2==1});SFXa('do_pop');if(!SKIP)ft(h.K[h.K.length-1].x,h.K[h.K.length-1].y-36,'호잇짜!','#ffe14a',18)}
+  h.K.forEach(b=>{if(b.dn)return;const a=u-b.t0;if(a<.35)return;if(a>1.3){b.dn=1;return}const tx=live?e.x:A/2,ty=live?e.y:A/2,dx=tx-b.x,dy=ty-b.y,d=Math.hypot(dx,dy)||1;b.x+=dx/d*620*dt;b.y+=dy/d*620*dt;
+    for(const x of EN){if(x.hid||x.jump)continue;if(Math.hypot(x.x-b.x,x.y-b.y)<x.r+16){b.dn=1;b.px=b.x;b.py=b.y;b.pt=u;hurt(x,1.6,o,b.x,b.y,0,0);if(!SKIP){SFXa('do_block');for(let k=0;k<5;k++)sparkP(b.x,b.y,rnd(-150,150),rnd(-150,150),k%2?'#ffe14a':'#ffffff',2.4)}break}}});
+  // !짜잇호 : 거대한 도티가 빨아들임 → 쾅
+  if(u>=3.3&&!h.zz){h.zz=1;SFXa('do_ult');h.gx=live?e.x:A/2;h.gy=live?clamp(e.y,140,A-40):A/2;if(!SKIP)ft(A/2,A*.2,'!짜잇호','#ffffff',1)}
+  if(u>=3.3&&u<3.95&&live){e.x+=(h.gx-e.x)*Math.min(1,dt*5);e.y+=(h.gy-e.y)*Math.min(1,dt*5);e.stn=Math.max(e.stn||0,.12);e.cast=null}
+  if(u>=3.95&&!h.im){h.im=1;SFXa('do_boom');shake=Math.max(shake,22);hs=.12;ytHitL(EN,h.hit,'g',h.gx,h.gy,80,6,o,1,x=>safePush(x,o.dead?rnd(0,TAU):ang(o,x),70));doBoom(h.gx,h.gy,150)}
+  return u<4.6};
+HZD.doul=h=>{const u=h.u;if(!(u>=0))return;const fa=u<4.3?Math.min(1,u/.4):Math.max(0,1-(u-4.3)/.3);lkDim(.5*fa);g.save();g.globalAlpha=.12*fa;g.fillStyle='#ff6fa8';g.fillRect(-40,-40,A+80,A+80);g.restore()};
 HZP.doul=h=>{const u=h.u;if(!(u>=0))return;
-  // 거대한 마크 도티
-  if(u>=.25&&u<4.45){const k=Math.min(1,(u-.25)/.35),fo=u>4.1?Math.max(0,1-(u-4.1)/.35):1;ytDraw('yt_ddotty_mc',A/2,150+(1-k)*-120+Math.sin(u*3)*4,210,.9*fo*k,0,0);if(u<1.4)ytTxt('초통령 등장!',A/2,172,28,'#ffffff',k*Math.min(1,(1.4-u)/.2),0,'#2b1a0c')}
-  h.W.forEach(b=>{const a=u-b.t0;if(a<0)return;if(!b.hit){const k=Math.min(1,a/.5);doBlock(b.x,b.y-(1-k*k)*420,54,b.ty,1,(1-k)*.6)}else if(a<.75){doBlock(b.x,b.y,54*(1-(a-.5)/.25),b.ty,1-(a-.5)/.25)}});
-  h.T.forEach(q=>{if(q.bm){const k=(u-q.t0)/.3;if(k<1){g.save();g.globalCompositeOperation='lighter';glow('#ffd23a',q.x,q.y,100*(.4+k),.8*(1-k));g.restore()}return}const a=u-3,sc=a<.12?.3+.7*a/.12:1,fl=Math.sin(u*40)>.1?.7:0;doBlock(q.x,q.y,30*sc,'tnt',1,0,fl)});
-  ytCut('yt_ddotty',u,'스카이블럭','대붕괴',DOG)};
+  // ㅋㅋㅋㅋ (개웃겨서)
+  h.L.forEach(l=>{const a=u-l.t0;if(a<0||a>1.4)return;const k=Math.min(1,a/.12),fo=a>1.1?(1.4-a)/.3:1;ytTxt('ㅋㅋㅋㅋ',l.x+Math.sin(u*40+l.s)*3,l.y,l.s*(.6+.4*k),'#ffffff',fo*k,l.r,'#ff4d8d')});
+  if(u>=.5&&u<1.9)ytTxt('개웃겨서…',A/2,A*.18,40,'#ffffff',Math.min(1,(u-.5)/.15)*(u>1.6?(1.9-u)/.3:1),-.04,'#ff4d8d');
+  h.K.forEach(b=>{const a=u-b.t0;if(b.dn){if(b.pt!=null&&u-b.pt<.35){const k=(u-b.pt)/.35;g.save();g.globalAlpha=1-k;g.strokeStyle='#ffe14a';g.lineWidth=3;g.beginPath();g.arc(b.px,b.py,10+k*30,0,TAU);g.stroke();g.restore()}return}
+    const pop=a<.2?a/.2*(1+.3*Math.sin(Math.PI*a/.2)):1;if(a<.3){g.save();g.globalCompositeOperation='lighter';glow('#ffe14a',b.x,b.y,50*(1-a/.3),.8);g.restore()}
+    ytDraw('yt_ddotty',b.x,b.y+18,54*pop,1,0,0,Math.sin(u*14+b.i)*.15);if(b.why&&a>.25)ytTxt('왜 나를 낳아?',b.x,b.y-46,14,'#ffffff',Math.min(1,(a-.25)/.1),0,'#ff4d8d')});
+  if(u>=3.25&&u<4.6){const k=Math.min(1,(u-3.25)/.3),fo=u>4.25?Math.max(0,1-(u-4.25)/.35):1,sq=u>=3.95&&u<4.15?1-.15*Math.sin(Math.PI*(u-3.95)/.2):1;ytDraw('yt_ddotty',clamp(h.gx,110,A-110),Math.max(h.gy,150)+110*sq,240*k*sq,fo,0,0,0);
+    if(u<3.95){g.save();g.globalAlpha=.5*k;g.strokeStyle='#ffe14a';g.lineWidth=2;for(let i=0;i<10;i++){const a=i*TAU/10+u*4,r=120*(1-((u*2+i*.1)%1));g.beginPath();g.moveTo(h.gx+Math.cos(a)*r,h.gy+Math.sin(a)*r);g.lineTo(h.gx+Math.cos(a)*(r+16),h.gy+Math.sin(a)*(r+16));g.stroke()}g.restore()}
+    ytTxt('!짜잇호',A/2,A*.18,52,'#ffffff',k*fo,.04,'#ff4d8d')}
+  ytCut('yt_ddotty',u,'개웃겨서','도티낳음',DOG)};
 EMB.dto=(f,D)=>{g.rotate(-f.rot);neon({col:DOG,hi:'#e8ffe8'},1.4,()=>{g.beginPath();g.moveTo(0,-14);g.lineTo(13,-7);g.lineTo(13,8);g.lineTo(0,15);g.lineTo(-13,8);g.lineTo(-13,-7);g.closePath();g.moveTo(0,1);g.lineTo(13,-7);g.moveTo(0,1);g.lineTo(-13,-7);g.moveTo(0,1);g.lineTo(0,15)})};
 
 // ======================================================================
@@ -2348,21 +2355,21 @@ EMB.chm=(f,D)=>{g.rotate(-f.rot);neon({col:'#ffffff',hi:'#ffffff'},1.4,()=>{g.be
 // 패시브 피파 대통령 : 6초마다 축구공을 하나 차서 벽에 튕기며 상대를 노림
 // 1) 슈퍼 슈팅 : 불붙은 바나나킥 · 벽에 세 번까지 튕기며 상대를 쫓아감
 // 2) 관제탑 댄스 : 손을 위아래로 흔들 때마다 상대 위치에 신호 빔이 십자로 교차 · 네 박자
-// 3) ULT 월드컵 결승 : 경기장이 축구장으로 → 상대 뒤에 골대 → 사방에서 공 다섯 개 → 마지막 슈팅이 골대로 "고오오올!!" → 관제탑 세리머니
+// 3) ULT 이게 뭐야?! : 중계 화면에서 실점 → "이게 뭐야! 이게 뭐야! 이게 뭐야!" 글자가 세 번 내리꽂힘 → 마지막에 책상 쾅!
 // ======================================================================
 const GMR='#d42a4a',GMB='#1f4fc8';
 function gmBall(x,y,r,rot,al){if(!(al>0))return;g.save();g.globalAlpha=Math.min(1,al);g.translate(x,y);g.rotate(rot||0);g.fillStyle='#ffffff';g.beginPath();g.arc(0,0,r,0,TAU);g.fill();g.strokeStyle='#111';g.lineWidth=1.4;g.stroke();g.fillStyle='#111';
   const pg=(cx,cy,s)=>{g.beginPath();for(let i=0;i<5;i++){const a=-Math.PI/2+i*TAU/5;g.lineTo(cx+Math.cos(a)*s,cy+Math.sin(a)*s)}g.closePath();g.fill()};pg(0,0,r*.36);for(let i=0;i<5;i++){const a=-Math.PI/2+i*TAU/5;g.save();g.beginPath();g.arc(0,0,r,0,TAU);g.clip();pg(Math.cos(a)*r*.92,Math.sin(a)*r*.92,r*.3);g.restore()}g.restore()}
-ytS(['gm_kick','gm_bounce','gm_whistle','gm_crowd','gm_goal','gm_beam','gm_net','gm_horn'],['감스트 · 슈팅','감스트 · 공 튕김','감스트 · 휘슬','감스트 · 관중 함성','감스트 · 고오오올!','감스트 · 관제탑 신호','감스트 · 골망 출렁','감스트 · 경기장 혼']);
+ytS(['gm_kick','gm_bounce','gm_whistle','gm_crowd','gm_beam','gm_slam'],['감스트 · 슈팅','감스트 · 공 튕김','감스트 · 휘슬','감스트 · 관중 탄식','감스트 · 관제탑 신호','감스트 · 책상 쾅']);
 const GAMSK=[
   {n:'슈퍼 슈팅',w:.25,cd:6.5,c:(o,t)=>!t.hid&&dist(o,t)<600,f:(o,t)=>gmShot(o,t,3.2,1)},
   {n:'관제탑 댄스',w:.3,cd:10,c:(o,t)=>!t.hid&&dist(o,t)<600,f:(o,t)=>gmDance(o,t)},
-  {n:'월드컵 결승',w:.4,ult:1,c:(o,t)=>!t.hid,f:(o,t)=>gamUlt(o,t)}];
+  {n:'이게 뭐야?!',w:.4,ult:1,c:(o,t)=>!t.hid,f:(o,t)=>gamUlt(o,t)}];
 const GAMI=DEF.findIndex(d=>d.name=='김가은');
 DEF.push({name:'김가은 • 감스트',gl:'감',k:'gms',vof:GAMI,r:27,sp:204,col:GMR,hi:'#ffffff',dk:'#0a1a4a',alt:{col:GMB,hi:'#e0e8ff',dk:'#020a2a'},alt2:{col:'#2fd66a',hi:'#e0ffe8',dk:'#04200c'},sk:GAMSK});
 INFO['김가은 • 감스트']={st:[8,8,8,9,8,10],p:'피파 대통령 · 6초마다 축구공을 하나 차서 벽에 튕기며 상대를 노림 (1.8)',
-  sk:[['3.2','불붙은 바나나킥 · 휘어져 날아가다 벽에 세 번까지 튕기며 상대를 쫓아감'],['1.8×8','관제탑 댄스 · 손을 위아래로 흔들 때마다 상대가 있던 자리에 신호 빔이 십자로 교차 (네 박자)'],['1.6×5+7','경기장이 축구장으로 → 상대 뒤에 골대 → 사방에서 공 다섯 개 → 마지막 슈팅이 골대로 "고오오올!!" → 관제탑 세리머니']]};
-YTPOP.gms=(f,s)=>s.n=='관제탑 댄스'||s.ult?'yt_gamst2':'yt_gamst';
+  sk:[['3.2','불붙은 바나나킥 · 휘어져 날아가다 벽에 세 번까지 튕기며 상대를 쫓아감'],['1.8×8','관제탑 댄스 · 손을 위아래로 흔들 때마다 상대가 있던 자리에 신호 빔이 십자로 교차 (네 박자)'],['3.2×3+5.5','중계 화면에서 실점 → "이게 뭐야! 이게 뭐야! 이게 뭐야!" 글자가 세 번 내리꽂힘 (맞을 때마다 잠깐 멈춤) → 마지막에 책상 쾅!']]};
+YTPOP.gms=(f,s)=>s.ult?'yt_gamst3':s.n=='관제탑 댄스'?'yt_gamst2':'yt_gamst';
 // ---------- 공 (슈퍼 슈팅 · 패시브) ----------
 function gmShot(o,t,dmg,fire,nb){const a=ang(o,t),cv=(Math.random()<.5?-1:1)*(fire?1.1:.5);HZ.push({k:'gmsh',o,tg:t,t:0,x:o.x+Math.cos(a)*o.r,y:o.y+Math.sin(a)*o.r,a:a-cv*.35,cv,sp:fire?660:520,b:fire?3:1,dmg,fire,rot:0,tr:[]});SFXa('gm_kick')}
 HZX.gmsh=(h,dt,EN)=>{if(h.dn)return h.t-h.dn<.3;const e=h.tg;h.a+=h.cv*dt;if(ytLive(e)&&h.t>.25){const d=Math.atan2(e.y-h.y,e.x-h.x);let df=d-h.a;while(df>Math.PI)df-=TAU;while(df<-Math.PI)df+=TAU;h.a+=clamp(df,-1.6*dt,1.6*dt)}
@@ -2380,60 +2387,57 @@ HZX.gmdn=(h,dt,EN)=>{const o=h.o,e=h.tg;if(o.dead)return false;[.25,.6,.95,1.3].
 HZD.gmdn=h=>{h.B.forEach(b=>{const a=h.t-b.t0;if(a>=.28)return;g.save();g.globalAlpha=.55*Math.min(1,a/.1);g.strokeStyle=b.i%2?GMB:GMR;g.lineWidth=2;g.setLineDash([10,8]);g.translate(b.x,b.y);for(let q=0;q<2;q++){g.save();g.rotate(b.d+q*Math.PI/2);g.beginPath();g.moveTo(-A*1.5,0);g.lineTo(A*1.5,0);g.stroke();g.restore()}g.setLineDash([]);g.restore()})};
 HZP.gmdn=h=>{const o=h.o;h.B.forEach(b=>{const a=h.t-b.t0;if(a<.28||a>.6)return;const k=(a-.28)/.32,w=16*(1-k);g.save();g.translate(b.x,b.y);g.globalCompositeOperation='lighter';for(let q=0;q<2;q++){g.save();g.rotate(b.d+q*Math.PI/2);g.globalAlpha=.6*(1-k);g.fillStyle=b.i%2?GMB:GMR;g.fillRect(-A*1.5,-w,A*3,w*2);g.globalAlpha=1-k;g.fillStyle='#fff';g.fillRect(-A*1.5,-w*.3,A*3,w*.6);g.restore()}g.restore()});
   if(h.t<1.8&&!o.dead){const ph=h.t*Math.PI*2/.7,up=Math.sin(ph);gmHand(o.x-o.r-8,o.y-6-up*20,1.3,-.3,1);gmHand(o.x+o.r+8,o.y-6+up*20,1.3,.3,1)}};
-// ---------- 3) ULT 월드컵 결승 ----------
-function gamUlt(o,t){if(!t||t.dead)t=tgt(o);if(!t)return;HZ.push({k:'gamul',o,tg:t,t:0,Bs:[],hit:new Set(),nk:0})}
-HZX.gamul=(h,dt,EN)=>{const o=h.o,u=h.t-YTDL;h.u=u;if(u<0)return true;const e=h.tg,live=ytLive(e);if(!h.lk){h.lk=1;SFXa('gm_whistle');SFXa('gm_crowd')}if(!o.dead){o.gcd=Math.max(o.gcd,.4);o.cast=null}
-  if(u>=.9&&!h.net){h.net=1;const a=o.dead||!live?rnd(0,TAU):ang(o,e),cx=live?e.x:A/2,cy=live?e.y:A/2;h.na=a;h.nx=clamp(cx+Math.cos(a)*130,50,A-50);h.ny=clamp(cy+Math.sin(a)*130,50,A-50)}
-  if(live&&u>=1&&u<3.0)e.slow=Math.max(e.slow||0,.35);
-  for(let i=0;i<5;i++){const s=1.15+i*.26;if(u>=s&&h.nk<=i){h.nk=i+1;const a=-Math.PI/2+i*TAU/5+rnd(-.2,.2),R=330,sx=clamp(A/2+Math.cos(a)*R,10,A-10),sy=clamp(A/2+Math.sin(a)*R,10,A-10);h.Bs.push({x:sx,y:sy,rot:0,i,t0:u});SFXa('gm_kick')}}
-  h.Bs.forEach(b=>{if(b.dn)return;const tx=live?e.x:A/2,ty=live?e.y:A/2,dx=tx-b.x,dy=ty-b.y,d=Math.hypot(dx,dy)||1;b.x+=dx/d*620*dt;b.y+=dy/d*620*dt;b.rot+=dt*20;if(u-b.t0>1.2){b.dn=1;return}
-    if(live&&d<e.r+10){b.dn=1;hurt(e,1.6,o,b.x,b.y,0,0);if(!SKIP){SFXa('gm_bounce');ring(b.x,b.y,6,46,'#ffffff',4,.3)}}});
-  if(u>=2.75&&!h.ps){h.ps=1;h.px=o.dead?A/2:o.x;h.py=o.dead?A-40:o.y;SFXa('gm_kick')}
-  if(h.ps&&!h.pd){const tx=live?e.x:A/2,ty=live?e.y:A/2,dx=tx-h.px,dy=ty-h.py,d=Math.hypot(dx,dy)||1,k=Math.min(1,dt*900/d);h.px+=dx*k;h.py+=dy*k;if(d<(live?e.r:0)+12||u>3.2){h.pd=u;SFXa('gm_goal');SFXa('gm_net');shake=Math.max(shake,20);hs=.12;
-    if(live){hurt(e,7,o,e.x,e.y,0,1);if(!e.dead){safePush(e,Math.atan2(h.ny-e.y,h.nx-e.x),Math.min(160,Math.hypot(h.nx-e.x,h.ny-e.y)));e.stn=Math.max(e.stn||0,.4);e.cast=null}}EN.forEach(x=>{if(x==e||x.hid)return;if(Math.hypot(x.x-h.px,x.y-h.py)<80)hurt(x,3,o,x.x,x.y,0,0)});if(!SKIP){lkImp(h.px,h.py,140,'#ffffff');SFXa('gm_crowd')}}}
-  if(u>=3.35&&!h.hn){h.hn=1;SFXa('gm_horn');if(!o.dead)o.ytP={n:'yt_gamst2',t:0,big:1,d:1.3}}
-  return u<4.7};
-HZD.gamul=h=>{const u=h.u;if(!(u>=0))return;const fa=u<4.4?Math.min(1,u/.5):Math.max(0,1-(u-4.4)/.3);lkDim(.35*fa);g.save();g.globalAlpha=.42*fa;for(let i=0;i<10;i++){g.fillStyle=i%2?'#2a8a3a':'#237a32';g.fillRect(0,i*A/10,A,A/10)}
-  g.globalAlpha=.6*fa;g.strokeStyle='#ffffff';g.lineWidth=3;g.strokeRect(12,12,A-24,A-24);g.beginPath();g.moveTo(12,A/2);g.lineTo(A-12,A/2);g.stroke();g.beginPath();g.arc(A/2,A/2,70,0,TAU);g.stroke();g.strokeRect(A/2-110,12,220,80);g.strokeRect(A/2-110,A-92,220,80);g.restore()};
-HZP.gamul=h=>{const u=h.u;if(!(u>=0))return;const fa=u<4.4?1:Math.max(0,1-(u-4.4)/.3);
-  if(h.net){const k=Math.min(1,(u-.9)/.25)*fa,sh=h.pd&&u-h.pd<.6?Math.sin((u-h.pd)*40)*6*(1-(u-h.pd)/.6):0;g.save();g.globalAlpha=k;g.translate(h.nx,h.ny);g.rotate(h.na+Math.PI/2);g.strokeStyle='#ffffff';g.lineWidth=5;g.beginPath();g.moveTo(-60,10);g.lineTo(-60,-26);g.lineTo(60,-26);g.lineTo(60,10);g.stroke();
-    g.lineWidth=1;g.globalAlpha=k*.7;for(let i=-60;i<=60;i+=10){g.beginPath();g.moveTo(i,-26);g.lineTo(i+sh,-50);g.stroke()}for(let j=-26;j>=-50;j-=8){g.beginPath();g.moveTo(-60,j);g.lineTo(60,j+sh*.3);g.stroke()}g.restore()}
-  h.Bs.forEach(b=>{if(!b.dn)gmBall(b.x,b.y,10,b.rot,1)});if(h.ps&&!h.pd){g.save();g.globalCompositeOperation='lighter';glow('#ffd23a',h.px,h.py,26,.7);g.restore();gmBall(h.px,h.py,12,u*30,1)}
-  if(h.pd){const a=u-h.pd;if(a<1.2)ytTxt('고오오올!!',A/2,A*.32,58*(1+Math.max(0,.15-a)),'#ffffff',Math.min(1,a/.06)*(a>.95?(1.2-a)/.25:1),-.05,GMR)}
-  if(u>=1&&u<2.7)ytTxt('중계 : 감스트',A/2,A-40,18,'#ffffff',Math.min(1,(u-1)/.2)*(u>2.5?(2.7-u)/.2:1),0,GMB);
-  ytCut('yt_gamst',u,'월드컵 결승','고오오올!!',GMR)};
+// ---------- 3) ULT 이게 뭐야?! ----------
+const GMWT=[.55,1.25,2.0];
+function gamUlt(o,t){if(!t||t.dead)t=tgt(o);if(!t)return;HZ.push({k:'gamul',o,tg:t,t:0,hit:new Set(),nw:0,W:[]})}
+HZX.gamul=(h,dt,EN)=>{const o=h.o,u=h.t-YTDL;h.u=u;if(u<0)return true;const e=h.tg,live=ytLive(e);if(!h.lk){h.lk=1;SFXa('gm_whistle')}if(!o.dead){o.gcd=Math.max(o.gcd,.4);o.cast=null}
+  if(live&&u<3.75){h.ex=e.x;h.ey=e.y}else if(h.ex==null){h.ex=A/2;h.ey=A/2}
+  if(u>=1.25&&!h.gl){h.gl=1;SFXa('gm_crowd')}
+  if(u>=1.4&&!h.vo){h.vo=1;SFXa('yt_gamwhat')}
+  if(live&&u>=1.4&&u<3.75)e.slow=Math.max(e.slow||0,.35);
+  GMWT.forEach((c,i)=>{const tt=1.4+c;if(u>=tt&&h.nw<=i){h.nw=i+1;h.W.push({x:h.ex,y:h.ey,t0:u,i});SFXa('uz_slam');shake=Math.max(shake,14);hs=.06;ytHitL(EN,h.hit,'w'+i,h.ex,h.ey,70,3.2,o,0,x=>{x.stn=Math.max(x.stn||0,.25);x.cast=null});if(!SKIP)ring(h.ex,h.ey,20,110,i%2?GMB:GMR,7,.35)}});
+  if(u>=3.75&&!h.sl){h.sl=1;h.sx=h.ex;h.sy=h.ey}
+  if(u>=4.0&&!h.im){h.im=1;SFXa('gm_slam');shake=Math.max(shake,26);hs=.13;ytHitL(EN,h.hit,'s',h.sx,h.sy,85,5.5,o,1,x=>safePush(x,o.dead?rnd(0,TAU):ang(o,x),80));if(!SKIP){lkImp(h.sx,h.sy,160,GMR);ytCube(h.sx,h.sy,['#8a5a30','#5a3a1e','#ffffff'],20,320)}}
+  return u<4.65};
+HZD.gamul=h=>{const u=h.u;if(!(u>=0))return;const fa=u<4.35?Math.min(1,u/.4):Math.max(0,1-(u-4.35)/.3);lkDim(.55*fa)};
+HZP.gamul=h=>{const u=h.u;if(!(u>=0)||h.ex==null)return;const fa=u<4.35?1:Math.max(0,1-(u-4.35)/.3);
+  // 중계 화면 : 실점
+  if(u>=.85&&u<2.2){const k=Math.min(1,(u-.85)/.2)*(u>1.95?(2.2-u)/.25:1),X=A/2-120,Y=56,W=240,H=140;g.save();g.globalAlpha=k;g.fillStyle='#111';g.fillRect(X-8,Y-8,W+16,H+16);g.fillStyle='#2a8a3a';g.fillRect(X,Y,W,H);g.strokeStyle='#fff';g.lineWidth=2;g.strokeRect(X+6,Y+6,W-12,H-12);g.beginPath();g.moveTo(X+W/2,Y+6);g.lineTo(X+W/2,Y+H-6);g.stroke();g.strokeRect(X+W-40,Y+H/2-28,34,56);
+    const bk=Math.min(1,Math.max(0,(u-1)/.35));gmBall(X+W*.3+bk*(W*.62),Y+H*.55-bk*8,7,u*20,1);ytTxt('LIVE',X+26,Y+16,12,'#fff',1,0,YTR);g.restore();if(u>=1.35)ytTxt('실점…',A/2,Y+H+28,26,'#ff5a5a',k,0,'#000')}
+  // 이게 뭐야! ×3
+  h.W.forEach(w=>{const a=u-w.t0;if(a>1.4)return;const fo=a>1.1?(1.4-a)/.3:1,sc=a<.08?1.5-a/.08*.5:1;ytTxt('이게 뭐야!',w.x,w.y-60-w.i*8,44*sc,w.i%2?'#ffe14a':'#ffffff',fo*fa,(w.i-1)*.12,GMR)});
+  GMWT.forEach((c,i)=>{const tt=1.4+c,a=u-(tt-.18);if(a<0||a>=.18||h.nw>i)return;const k=a/.18;ytTxt('이게 뭐야!',h.ex,h.ey-60-(1-k)*300,44,'#ffffff',k,(i-1)*.12,GMR)});
+  // 화난 감스트
+  if(u>=1.35&&u<3.9){const k=Math.min(1,(u-1.35)/.2),fo=u>3.7?(3.9-u)/.2:1;ytDraw('yt_gamst3',A*.17+Math.sin(u*45)*5,A-10,190*k,fo,0,0,Math.sin(u*30)*.06)}
+  // 책상 쾅
+  if(u>=3.75&&u<4.65){const k=Math.min(1,(u-3.75)/.25),y=h.sy+70-(1-k*k)*420;if(u<4)ytTxt('책상 쾅!',A/2,A*.18,48,'#ffffff',k,0,GMR);ytDraw('yt_gamst3',h.sx,y,200,u>4.35?(4.65-u)/.3:1,0,0,(1-k)*.3);if(u>=4)ytTxt('쾅!!',A/2,A*.18,64,'#ffe14a',u>4.35?(4.65-u)/.3:1,-.05,GMR)}
+  ytCut('yt_gamst3',u,'이게 뭐야?!','북중미 월드컵 남아공전',GMR)};
 EMB.gms=(f,D)=>{g.rotate(-f.rot);neon({col:'#ffffff',hi:'#ffffff'},1.3,()=>{g.beginPath();g.arc(0,0,12,0,TAU);for(let i=0;i<5;i++){const a=-Math.PI/2+i*TAU/5;g.moveTo(Math.cos(a)*4.5,Math.sin(a)*4.5);g.lineTo(Math.cos(a)*12,Math.sin(a)*12)}g.moveTo(4.5,0);for(let i=0;i<=5;i++){const a=-Math.PI/2+i*TAU/5;g.lineTo(Math.cos(a)*4.5,Math.sin(a)*4.5)}})};
 
 // ======================================================================
 // 김지우 • 우주하마 (물뚱땡 · 그림판 · 우!주!하!마!)
 // 패시브 물뚱땡 : 8초마다 물을 벌컥벌컥 마시고 체력 +3
-// 1) 그림판 낙서 : 마우스 커서가 상대 둘레에 네모를 그림 → 페인트 통으로 쏟아부어 칠함 → 칠한 곳에 있으면 아프고 느려짐
+// 1) 흔들어 제끼라우! : 승리 쌈바 · 엉덩이를 흔들 때마다 ")) ((" 가 상대에게 날아감
 // 2) 앞니 콱! : 상대 옆에 파란 하마 얼굴이 튀어나와 앞니 두 개로 콱
-// 3) ULT 우!주!하!마! : 우주로 → 3 · 2 · 1 → "우! 주! 하! 마!" 한 글자씩 내리꽂힘 → "따!!" 거대한 하마가 우주에서 쿵 → 흔들어 제끼라우!
+// 3) ULT 우!주!하!마! : 우주로 → 3 · 2 · 1 → "우! 주! 하! 마!" 한 글자씩 내리꽂힘 → "따!!" 거대한 하마가 우주에서 쿵 → 행복마이 댄스파티!
 // ======================================================================
 const UZB='#6b93c4',UZP=['#ff2a2a','#ffe600','#22e04a','#1e90ff','#ff38d6','#ff8c00'];
-ytS(['uz_pen','uz_fill','uz_bite','uz_drink','uz_count','uz_slam','uz_space','uz_samba','uz_fall'],['우주하마 · 그림판 딸깍','우주하마 · 페인트 통','우주하마 · 앞니 콱','우주하마 · 물 벌컥','우주하마 · 카운트다운','우주하마 · 글자 쿵','우주하마 · 우주로','우주하마 · 흔들어 제끼라우','우주하마 · 거대 하마 쿵']);
+ytS(['uz_shake','uz_bite','uz_drink','uz_count','uz_slam','uz_space','uz_samba','uz_fall'],['우주하마 · 흔들어 제끼라우','우주하마 · 앞니 콱','우주하마 · 물 벌컥','우주하마 · 카운트다운','우주하마 · 글자 쿵','우주하마 · 우주로','우주하마 · 흔들어 제끼라우','우주하마 · 거대 하마 쿵']);
 const UZSK=[
-  {n:'그림판 낙서',w:.3,cd:9,c:(o,t)=>!t.hid&&dist(o,t)<600,f:(o,t)=>uzPaint(o,t)},
+  {n:'흔들어 제끼라우!',w:.25,cd:8,c:(o,t)=>!t.hid&&dist(o,t)<560,f:(o,t)=>uzShake(o,t)},
   {n:'앞니 콱!',w:.25,cd:7,c:(o,t)=>!t.hid&&dist(o,t)<600,f:(o,t)=>uzBite(o,t)},
   {n:'우!주!하!마!',w:.4,ult:1,c:(o,t)=>!t.hid,f:(o,t)=>uzUlt(o,t)}];
 const UZI=DEF.findIndex(d=>d.name=='김지우');
 DEF.push({name:'김지우 • 우주하마',gl:'하',k:'uzh',vof:UZI,r:28,sp:200,col:UZB,hi:'#ffffff',dk:'#141a2a',alt:{col:'#a46bff',hi:'#efe4ff',dk:'#14082a'},alt2:{col:'#ff8c3a',hi:'#ffe8d6',dk:'#2a1004'},sk:UZSK});
 INFO['김지우 • 우주하마']={st:[8,9,7,8,8,10],p:'물뚱땡 · 8초마다 물을 벌컥벌컥 마시고 체력 +3',
-  sk:[['1×n','마우스 커서가 상대 둘레에 네모를 그림 → 페인트 통을 쏟아 칠함 → 칠한 곳에 있으면 계속 아프고 느려짐'],['7','상대 옆에 파란 하마 얼굴이 불쑥 튀어나와 앞니 두 개로 콱!'],['1.8×4+7','우주로 → 3 · 2 · 1 → "우! 주! 하! 마!" 한 글자씩 내리꽂힘 → "따!!" 거대한 하마가 우주에서 쿵 → 흔들어 제끼라우!']]};
+  sk:[['0.95×8','"흔들어 제끼라우!" 승리 쌈바 · 엉덩이를 흔들 때마다 ")) ((" 가 상대에게 날아감'],['7','상대 옆에 파란 하마 얼굴이 불쑥 튀어나와 앞니 두 개로 콱!'],['1.8×4+7','우주로 → 3 · 2 · 1 → "우! 주! 하! 마!" 한 글자씩 내리꽂힘 → "따!!" 거대한 하마가 우주에서 쿵 → 행복마이 댄스파티!']]};
 YTPOP.uzh=()=>'yt_uzu';
-// ---------- 1) 그림판 낙서 ----------
-function uzCursor(x,y,ty,al){if(!(al>0))return;g.save();g.globalAlpha=Math.min(1,al);g.translate(x,y);g.fillStyle='#fff';g.strokeStyle='#000';g.lineWidth=1.5;g.lineJoin='round';
-  if(ty=='bucket'){g.rotate(-.5);g.beginPath();g.moveTo(-8,-6);g.lineTo(8,-6);g.lineTo(6,10);g.lineTo(-6,10);g.closePath();g.fill();g.stroke();g.beginPath();g.ellipse(0,-6,8,3,0,0,TAU);g.fill();g.stroke()}
-  else{g.beginPath();g.moveTo(0,0);g.lineTo(0,17);g.lineTo(4.5,13);g.lineTo(8,20);g.lineTo(10.5,19);g.lineTo(7,12.5);g.lineTo(12,12.5);g.closePath();g.fill();g.stroke()}g.restore()}
-function uzPaint(o,t){const w=rnd(150,180),hh=rnd(120,150);HZ.push({k:'uzpt',o,tg:t,t:0,cx:clamp(t.x,w/2+8,A-w/2-8),cy:clamp(t.y,hh/2+8,A-hh/2-8),w,h:hh,col:UZP[Math.floor(rnd(0,UZP.length))],cd:{}});SFXa('uz_pen')}
-HZX.uzpt=(h,dt,EN)=>{if(h.t>=.55&&!h.fl){h.fl=1;SFXa('uz_fill')}if(h.t>=.7&&h.t<2.7)EN.forEach(x=>{if(x.hid||x.jump)return;if(Math.abs(x.x-h.cx)<h.w/2&&Math.abs(x.y-h.cy)<h.h/2){x.slow=Math.max(x.slow||0,.35);if((h.cd[x.i]||0)<=h.t){h.cd[x.i]=h.t+.3;hurt(x,1,h.o,x.x,x.y,0,0)}}});return h.t<3};
-HZD.uzpt=h=>{const x0=h.cx-h.w/2,y0=h.cy-h.h/2,P=2*(h.w+h.h),pr=Math.min(1,h.t/.5)*P;
-  if(h.t>=.55){const k=Math.min(1,(h.t-.55)/.25),fo=h.t>2.7?Math.max(0,1-(h.t-2.7)/.3):1;g.save();g.globalAlpha=.75*fo;g.fillStyle=h.col;g.beginPath();g.rect(x0,y0,h.w,h.h);g.clip();g.beginPath();g.arc(h.cx,h.cy,Math.hypot(h.w,h.h)/2*k,0,TAU);g.fill();g.restore();
-    g.save();g.globalAlpha=.25*fo;g.fillStyle='#000';for(let i=0;i<6;i++){g.fillRect(x0+((i*37+Math.floor(clock*4)*13)%h.w),y0+((i*53)%h.h),2,2)}g.restore()}
-  const fo=h.t>2.7?Math.max(0,1-(h.t-2.7)/.3):1;g.save();g.globalAlpha=fo;g.strokeStyle='#000';g.lineWidth=3;g.beginPath();const pts=[[x0,y0],[x0+h.w,y0],[x0+h.w,y0+h.h],[x0,y0+h.h],[x0,y0]];let acc=0,cx=x0,cy=y0;g.moveTo(x0,y0);
-  for(let i=1;i<5;i++){const [ax,ay]=pts[i-1],[bx,by]=pts[i],L=Math.hypot(bx-ax,by-ay);if(acc+L<=pr){g.lineTo(bx,by);cx=bx;cy=by;acc+=L}else{const q=(pr-acc)/L;cx=ax+(bx-ax)*q;cy=ay+(by-ay)*q;g.lineTo(cx,cy);break}}g.stroke();g.restore();h.cux=cx;h.cuy=cy};
-HZP.uzpt=h=>{if(h.t<.5)uzCursor(h.cux||h.cx,h.cuy||h.cy,'arrow',1);else if(h.t<.9){const k=(h.t-.5)/.4;uzCursor(h.cx+20,h.cy-30-k*6,'bucket',1-Math.max(0,k-.6)/.4)}if(h.t<.6)ytTxt('그림판',h.cx,h.cy-h.h/2-16,16,'#ffffff',1,0,'#1e60c8')};
+// ---------- 1) 흔들어 제끼라우! ----------
+function uzShake(o,t){HZ.push({k:'uzsh',o,tg:t,t:0,P:[],n:0});SFXa('uz_shake');setTimeout(()=>{try{SFXa('uz_samba')}catch(x){}},150);if(!SKIP)ft(o.x,o.y-o.r-36,'흔들어 제끼라우!','#ffe600',22)}
+HZX.uzsh=(h,dt,EN)=>{const o=h.o,e=h.tg;while(h.n<8&&h.t>=.2+h.n*.2&&!o.dead){const i=h.n++,a=(ytLive(e)?ang(o,e):rnd(0,TAU))+(i%2?.18:-.18);h.P.push({x:o.x,y:o.y,a,c:i%2?'((':'))',col:UZP[i%UZP.length],t0:h.t})}
+  let any=h.n<8&&!o.dead;h.P.forEach(p=>{if(p.dn)return;any=1;if(ytLive(e)){const d=Math.atan2(e.y-p.y,e.x-p.x);let df=d-p.a;while(df>Math.PI)df-=TAU;while(df<-Math.PI)df+=TAU;p.a+=clamp(df,-2.2*dt,2.2*dt)}p.x+=Math.cos(p.a)*440*dt;p.y+=Math.sin(p.a)*440*dt;
+    if(p.x<-30||p.x>A+30||p.y<-30||p.y>A+30||h.t-p.t0>1.4){p.dn=1;return}for(const x of EN){if(x.hid||x.jump)continue;if(Math.hypot(x.x-p.x,x.y-p.y)<x.r+14){p.dn=1;hurt(x,.95,o,p.x,p.y,0,0);if(!SKIP)for(let k=0;k<4;k++)sparkP(p.x,p.y,rnd(-140,140),rnd(-140,140),p.col,2.2);break}}});return any};
+HZP.uzsh=h=>{const o=h.o;h.P.forEach(p=>{if(!p.dn)ytTxt(p.c,p.x,p.y,30,p.col,1,p.a,'#000')});if(h.t<1.85&&!o.dead){const s=Math.sin(h.t*Math.PI*2/.4);ytTxt(s>0?'))':'((',o.x+(s>0?1:-1)*(o.r+16),o.y+6,26,'#ffffff',.9,0,'#1e3a8a')}};
 // ---------- 2) 앞니 콱! ----------
 function uzBite(o,t){const a=rnd(0,TAU);HZ.push({k:'uzbt',o,tg:t,t:0,a,x:t.x,y:t.y,hit:new Set()});SFXa('gb_pop')}
 HZX.uzbt=(h,dt,EN)=>{const e=h.tg;if(h.t<.55&&ytLive(e)){h.x=e.x;h.y=e.y}if(h.t>=.62&&!h.b){h.b=1;SFXa('uz_bite');shake=Math.max(shake,12);hs=.07;ytHitL(EN,h.hit,'b',h.x,h.y,40,7,h.o,1,x=>{x.stn=Math.max(x.stn||0,.3);x.cast=null;if(!SKIP)ft(x.x,x.y-x.r-30,'콱!','#ffffff',26)})}return h.t<1.15};
@@ -2461,7 +2465,7 @@ HZP.uzul=h=>{const u=h.u;if(!(u>=0)||h.ex==null)return;
   UZSY.forEach(([c,at],i)=>{const tt=1.9+at,a=u-(tt-.18);if(a<0||u>4.3)return;const k=Math.min(1,a/.18),y=h.ey-(1-k*k)*360-10,ox=(i-1.5)*58;ytTxt(c,h.ex+ox*Math.min(1,Math.max(0,u-tt)*6),y,74,UZP[i],1,(i%2?.12:-.12),'#000')});
   if(u>=1.9&&u<3.9){const fo=u>3.6?(3.9-u)/.3:1;ytTxt('우! 주! 하! 마!',A/2,A-60,26,'#ffffff',fo*Math.min(1,(u-1.9)/.1),0,'#1e3a8a')}
   if(u>=3.9&&u<4.75){const k=Math.min(1,(u-3.9)/.35),y=h.ey+90-(1-k*k)*520;if(u<4.25){g.save();g.globalAlpha=.35*k;g.fillStyle='#000';g.beginPath();g.ellipse(h.ex,h.ey+20,110*k,30*k,0,0,TAU);g.fill();g.restore()}ytDraw('yt_uzu',h.ex+(u>4.25?Math.sin(u*40)*4:0),y,230,u>4.55?(4.75-u)/.2:1,0,0,(1-k)*.4);
-    if(u>=3.9&&u<4.3)ytTxt('따!!',A/2,A*.24,70,'#ffffff',Math.min(1,(u-3.9)/.08),0,'#ff2a2a');if(u>=4.25)ytTxt('흔들어 제끼라우!',A/2,A*.24,32,'#ffe600',Math.min(1,(u-4.25)/.08)*(u>4.6?(4.75-u)/.15:1),Math.sin(u*18)*.08,'#000')}
+    if(u>=3.9&&u<4.3)ytTxt('따!!',A/2,A*.24,70,'#ffffff',Math.min(1,(u-3.9)/.08),0,'#ff2a2a');if(u>=4.25)ytTxt('행복마이 댄스파티!',A/2,A*.24,32,'#ffe600',Math.min(1,(u-4.25)/.08)*(u>4.6?(4.75-u)/.15:1),Math.sin(u*18)*.08,'#000')}
   ytCut('yt_uzu',u,'우주하마','우! 주! 하! 마!',UZB)};
 EMB.uzh=(f,D)=>{g.rotate(-f.rot);neon({col:'#ffffff',hi:'#ffffff'},1.4,()=>{g.beginPath();g.rect(-8,-2,6,8);g.rect(2,-2,6,8);g.moveTo(-14,-3);g.lineTo(14,-5)});neon(D,1,()=>{g.beginPath();g.arc(-5,-11,1.2,0,TAU);g.moveTo(6.2,-11);g.arc(5,-11,1.2,0,TAU)})};
 
@@ -2484,7 +2488,7 @@ const _initYT=init;init=function(){_initYT.apply(this,arguments);if(F)F.forEach(
 [['dto',DOSK],['bst',MBSK],['gbr',GBSK],['chm',CMSK],['gms',GAMSK],['uzh',UZSK]].forEach(([k,L])=>L.forEach(sk=>{const f0=sk.f;sk.f=function(o,t){if(o&&(!o.ytP||o.ytP.t>.7))o.ytP={n:YTPOP[k](o,sk),t:0,big:!!sk.ult};return f0.apply(this,arguments)}}));
 // 궁극기 봉인 · 밸런스
 [DOSK,MBSK,GBSK,CMSK,GAMSK,UZSK].forEach(L=>L.forEach(ulkWrap));
-Object.assign(DMGK,{dto:1.135,bst:1.907,gbr:2.3,chm:2.1,gms:1.99,uzh:2.02});
+Object.assign(DMGK,{dto:1.36,bst:1.907,gbr:2.3,chm:2.1,gms:1.99,uzh:1.69});
 // ---------- 마무리 : 목록 · 사전 다시 그리기 ----------
 document.querySelectorAll('#grid .tile').forEach(t=>{const i=+t.dataset.i,vc=DEF.filter(x=>x.vof===i).length;let em=t.querySelector('.vb');if(vc){if(!em){em=document.createElement('em');em.className='vb';t.appendChild(em)}em.textContent='+'+vc}});
 Object.keys(ICC).forEach(k=>delete ICC[k]);mkDict();

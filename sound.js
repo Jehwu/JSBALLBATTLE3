@@ -739,7 +739,6 @@ G.do_boom=()=>{const b=Z(1.6);place(b,hRumble(1.4,2.6),0,1);place(b,hSub(110,30,
 G.do_dash=()=>{const b=Z(.55);place(b,hWhoosh(.32,700,4200),0,.9);place(b,mul(pkSq(t=>300+1500*t/.25,.25,.25),t=>.18*Math.exp(-t*6)),0,1);return verb(b,.3,.15,4000)};
 G.do_resp=()=>{const b=Z(1.4);place(b,ytVox([[.06,'a'],[.5,'a']],t=>360+50*Math.sin(PI2*9*t)-80*t,.14,3),0,1.1);place(b,pkChip([523,659,784,1047,1319],.07,.25,12),.62,1);return verb(b,.6,.2,4500)};
 G.do_ult=()=>{const b=Z(2.2);place(b,hRumble(1.6,1.6),0,.7);place(b,pkChip([392,523,659,784,1047,784,1047,1319],.085,.25,7),.15,1.1);place(b,bell(523,1.4,2.6),.85,.35);place(b,bell(784,1.2,2.8),.85,.25);return verb(b,1.3,.3,4500)};
-G.do_fall=()=>{const b=Z(.6);place(b,mul(sweepEnv(1500,420,.5),t=>.35*Math.min(1,t/.05)*Math.min(1,(.5-t)/.1)),0,1);place(b,hWhoosh(.5,600,2500),0,.4);return verb(b,.3,.2,3500)};
 // --- 미스터 비스트 ---
 G.mb_card=()=>{const b=Z(.15);place(b,ed(bp(noise(.02),2000,6000),200),0,.8);place(b,ed(sine(1800,.04),90),0,.35);return b};
 G.mb_coin=()=>{const b=Z(.9);place(b,chime(2093,.7),0,.7);place(b,chime(2637,.6),.07,.6);return verb(b,.5,.2,7000)};
@@ -774,13 +773,8 @@ G.gm_kick=()=>{const b=Z(.5);place(b,hSub(160,55,.14,22,2.5),0,1);place(b,ed(bp(
 G.gm_bounce=()=>{const b=Z(.35);place(b,hSub(230,120,.07,40,1.6),0,.8);place(b,ytClk(1300,250),0,.25);return verb(b,.2,.1,3500)};
 G.gm_whistle=()=>{let ph=0;const d=.75,x=T(d,t=>{ph+=PI2*(2750+90*Math.sin(PI2*31*t))/SR;return Math.sin(ph)*(.55+.45*Math.sign(Math.sin(PI2*31*t)))*.3*Math.min(1,t/.02)*Math.min(1,(d-t)/.08)});add(x,mul(bp(noise(d),2200,3600),t=>.12),1);return verb(x,.6,.25,6000)};
 G.gm_crowd=()=>{const d=2.2,b=Z(d);add(b,mul(crowdN(d),t=>Math.min(1,t/.35)*Math.min(1,(d-t)/.7)*.9));for(let k=0;k<10;k++)place(b,mul(bp(noise(.15),1500,3500),t=>.25*Math.sin(Math.PI*t/.15)),U(.2,1.6),1);return verb(b,1.2,.35,3500)};
-G.gm_goal=()=>{const b=Z(2);place(b,ed(bp(noise(.03),300,2500),90),0,.5);place(b,ytVox([[.06,[[200,900,.6]]],[1.25,'o'],[.2,'u']],t=>210+110*Math.min(1,t/.35)+16*Math.sin(PI2*6.5*t)*Math.min(1,t/.3),.22,3),.02,1.1);add(b,mul(crowdN(2),t=>.45*Math.min(1,t/.3)*Math.min(1,(2-t)/.5)));return verb(b,1.1,.3,4000)};
 G.gm_beam=()=>{const b=Z(.5);place(b,mul(lp(pkSq(t=>1900-1500*t/.25,.25,.4),4500),t=>.25*Math.exp(-t*6)),0,1);place(b,ed(hp(noise(.08),3000),40),0,.4);return verb(b,.3,.15,5000)};
-G.gm_net=()=>{const b=Z(.6);place(b,mul(movBP(noise(.45),2200,500,.25),t=>.7*Math.sin(Math.PI*t/.45)),0,1);return verb(b,.3,.15,4000)};
-G.gm_horn=()=>{const d=1.1,b=Z(d+.3);[233,294,349].forEach(f=>place(b,mul(lp(saw(f*(1+U(-.004,.004)),d,14),2600),t=>.22*Math.min(1,t/.04)*Math.min(1,(d-t)/.12)),0,1));return verb(b,.9,.3,3000)};
 // --- 우주하마 ---
-G.uz_pen=()=>{const b=Z(.3);place(b,ytClk(2600,350),0,.7);place(b,ytClk(2200,350),.09,.6);return b};
-G.uz_fill=()=>{const b=Z(.9);place(b,mul(sweepEnv(900,180,.35),t=>.4*Math.exp(-t*6)),0,1);place(b,mul(bp(noise(.5),300,2200),t=>.35*Math.sin(Math.PI*t/.5)),.08,1);place(b,ytBub(12,.6,250,700),.1,.6);return verb(b,.5,.2,3000)};
 G.uz_bite=()=>{const b=Z(.6);place(b,ytClk(1800,160),0,1);place(b,ytClk(1500,160),.02,.8);place(b,hSub(200,80,.12,25,2),0,.8);place(b,hCrack(.08,800,5000,40),.01,.5);return verb(b,.3,.15,3500)};
 G.uz_drink=()=>{const b=Z(1);[0,.24,.48].forEach(at=>place(b,mul(sweepEnv(320,120,.14),t=>.45*Math.sin(Math.PI*t/.14)),at,1));place(b,ytBub(10,.8,400,1100),.05,.5);return verb(b,.4,.2,3000)};
 G.uz_count=()=>{const b=Z(.3);place(b,utSq(784,.14,.5,.35,4500),0,1);return verb(b,.25,.12,5000)};
@@ -788,7 +782,10 @@ G.uz_slam=()=>{const b=Z(.9);place(b,hSub(150,45,.35,9,3),0,1);place(b,hCrack(.1
 G.uz_space=()=>{const d=1.3,b=Z(d+.4);place(b,mul(movBP(noise(d),300,3500,.2),t=>.5*Math.sin(Math.PI*t/d)),0,1);place(b,mul(sweepEnv(200,900,d,1.4),t=>.2*Math.sin(Math.PI*t/d)),0,1);for(let k=0;k<8;k++)place(b,chime(U(1500,3500),.5),U(.2,1.1),.15);return verb(b,1.4,.4,5000)};
 G.uz_samba=()=>{const st=.125,d=st*16+.3,b=Z(d);for(let i=0;i<16;i++){const at=i*st;if(i%4==0||i%8==6)place(b,hSub(90,55,.18,12,2),at,.8);if([0,3,6,8,10,13,14].includes(i))place(b,ytClk(2400,260),at,.45);place(b,mul(hp(noise(.05),5000),t=>.25*Math.exp(-t*50)),at+st*.5,1);if(i%2)place(b,ed(bp(noise(.04),600,1600),80),at,.3)}place(b,mul(sine(2200,.15),t=>.12*Math.sin(Math.PI*t/.15)),st*14,1);return verb(b,.5,.18,4500)};
 G.uz_fall=()=>{const b=Z(2);place(b,mul(sweepEnv(1200,300,.4),t=>.25*Math.min(1,t/.05)),0,1);place(b,hPunch(true),.38,1.1);place(b,hRumble(1.4,2),.38,.6);return verb(b,1,.25,2800)};
-Object.assign(PK,{do_fuse:.5,mb_card:.5,mb_count:.6,uz_count:.6,uz_pen:.55,gm_whistle:.65,gm_crowd:.7,uz_samba:.7,gb_bug:.55,cm_pen:.6,mb_bill:.65});
+G.do_pop=()=>{const b=Z(.6);place(b,mul(sweepEnv(300,1200,.12),t=>.45*Math.exp(-t*14)),0,1);place(b,ed(hp(noise(.02),2000),180),0,.5);place(b,pkChip([784,1175],.06,.3,14),.06,.8);place(b,ytBub(5,.3,500,1400),.04,.5);return verb(b,.35,.18,5000)};
+G.gm_slam=()=>{const b=hPunch(true);place(b,ytClk(400,70),0,.8);for(let k=0;k<6;k++)place(b,ed(bp(noise(.05),300,2500),60),U(.02,.25),.4);return verb(b,1,.22,2600)};
+G.uz_shake=()=>{const b=Z(.9);[0,.2,.4,.6].forEach((at,i)=>{place(b,mul(sweepEnv(i%2?520:420,i%2?380:300,.14),t=>.35*Math.sin(Math.PI*t/.14)),at,1);place(b,mul(hp(noise(.05),5000),t=>.3*Math.exp(-t*50)),at+.1,1)});return verb(b,.4,.18,4500)};
+Object.assign(PK,{do_fuse:.5,mb_card:.5,mb_count:.6,uz_count:.6,gm_whistle:.65,gm_crowd:.7,uz_samba:.7,gb_bug:.55,cm_pen:.6,mb_bill:.65});
 window.GENSFX=Object.keys(G);
 // 만들기 순서 : 지금 싸우는 캐릭터 소리를 먼저 · 로딩을 건너뛰어도 게임하면서 끝까지 계속 만듦
 const GL=Object.keys(G),GI={};GL.forEach((n,i)=>GI[n]=i+1);let GQ=GL.slice(),GDONE=0;
